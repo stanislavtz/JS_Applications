@@ -20,7 +20,7 @@ class Hex {
     }
 
     parse(str) {
-        return parseInt(str, 10)
+        return parseInt(str, 10);
     }
 
     defineValue(val) {
