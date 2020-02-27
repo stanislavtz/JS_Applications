@@ -3,7 +3,7 @@ class Hex {
         this.value = Number(value);
     }
 
-    valueOF() {
+    valueOf() {
         return this.value;
     }
 
@@ -11,26 +11,19 @@ class Hex {
         return `0x${this.value.toString(16).toUpperCase()}`;
     }
 
-    plus(value) {
-        let that = this.valueOF() + this.valueOF.call(value);
-        return `0x${that.toString(16).toUpperCase()}`;
+    plus(val) {
+        return new Hex(this.valueOf() + this.defineValue(val));
     }
 
-    minus(value) {
-        let that = this.valueOF() - this.valueOF.call(value);
-        return `0x${that.toString(16).toUpperCase()}`;
+    minus(val) {
+        return new Hex(this.valueOf() - this.defineValue(val));
     }
 
     parse(str) {
-        return parseInt(str, 16)
+        return parseInt(str, 10)
     }
 
+    defineValue(val) {
+        return (val instanceof Hex) ? val.valueOf() : val;
+    }
 }
-let FF = new Hex(255);
-console.log(FF.toString());
-console.log(FF.valueOf() + 1);
-console.log(FF.valueOf() + 1 == 256);
-let a = new Hex(10);
-let b = new Hex(5);
-console.log(a.plus(b).toString());
-console.log(a.plus(b).toString()==='0xF');
