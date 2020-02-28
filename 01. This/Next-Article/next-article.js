@@ -6,9 +6,8 @@ function getArticleGenerator(articles) {
         if (articlesCopy.length === 0) {
             return;
         }
-        
-        let element = articlesCopy.shift();
 
+        let element = articlesCopy.shift();
         let article = document.createElement(`article`);
         article.textContent = element;
 
