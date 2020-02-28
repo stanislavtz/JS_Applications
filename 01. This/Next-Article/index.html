@@ -11,16 +11,6 @@
 <div id="content"></div>
 <div><button onclick="showNext()">Show Next Article</button></div>
 <script>
-  function getArticleGenerator(articles) {
-    // TODO
-    const content = document.querySelector('#content');
-    const articleTag = document.createElement('article');
-    const currentArticle = articles.shift();
-    articleTag.textContent = currentArticle;
-    content.appendChild(articleTag);
-
-    return articles
-  }
   let articles =[
     "Cats are the most popular pet in the United States: There are 88 million pet cats and 74 million dogs.",
     "A group of cats is called a clowder.",
