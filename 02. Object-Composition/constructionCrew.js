@@ -8,10 +8,3 @@ function solve(warker) {
 
     return warker;
 }
-
-console.log(solve({ weight: 120,
-    experience: 20,
-    levelOfHydrated: 200,
-    dizziness: true }
-  
-  ))
