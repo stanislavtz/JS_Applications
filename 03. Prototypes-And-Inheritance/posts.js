@@ -28,7 +28,7 @@ function solve() {
         }
 
         toString() {
-            let result = super.toString() + '\n';
+            let result = `${super.toString()}\n`;
             result += `Rating: ${this.likes - this.dislikes}\n`;
 
             if(this._comments.length > 0){
@@ -52,8 +52,7 @@ function solve() {
         }
 
         toString(){
-            let result = super.toString() + '\n';
-            result = super.toString() + '\n';
+            let result = `${super.toString()}\n`;
             result += `Views: ${this.views.views}`;
 
             return result;
@@ -66,9 +65,3 @@ function solve() {
         BlogPost
     }
 }
-
-let classes = solve();
-
-let test = new classes.BlogPost("TestTitle", "TestContent", 5);
-
-test.view().view().view();
