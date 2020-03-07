@@ -9,7 +9,7 @@ function solve() {
 
         work() {
             const currentWork = this.tasks.shift();
-            console.log(currentWork);
+            console.log(this.name + currentWork);
             this.tasks.push(currentWork);
         }
 
@@ -25,16 +25,16 @@ function solve() {
     class Junior extends Employee {
         constructor(name, age) {
             super(name, age);
-            this.tasks.push(`${this.name} is working on a simple task.`);
+            this.tasks.push(` is working on a simple task.`);
         }
     }
 
     class Senior extends Employee {
         constructor(name, age) {
             super(name, age);
-            this.tasks.push(`${this.name} is working on a complicated task.`);
-            this.tasks.push(`${this.name} is taking time off work.`);
-            this.tasks.push(`${this.name} is supervising junior workers.`);
+            this.tasks.push(` is working on a complicated task.`);
+            this.tasks.push(` is taking time off work.`);
+            this.tasks.push(` is supervising junior workers.`);
         }
     }
 
@@ -42,8 +42,8 @@ function solve() {
         constructor(name, age) {
             super(name, age);
             this.dividend = 0;
-            this.tasks.push(`${this.name} scheduled a meeting.`);
-            this.tasks.push(`${this.name} is preparing a quarterly report.`);
+            this.tasks.push(` scheduled a meeting.`);
+            this.tasks.push(` is preparing a quarterly report.`);
         }
 
         getSalary() {

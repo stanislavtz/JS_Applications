@@ -42,18 +42,17 @@ function solve() {
     class BlogPost extends Post {
         constructor(title, content, views) {
             super(title, content);
-            this.views = {views};
+            this.views = views;
         }
 
         view() {
-            this.views.views++;
-
+            this.views++;
             return this;
         }
 
         toString(){
             let result = `${super.toString()}\n`;
-            result += `Views: ${this.views.views}`;
+            result += `Views: ${this.views}`;
 
             return result;
         }
