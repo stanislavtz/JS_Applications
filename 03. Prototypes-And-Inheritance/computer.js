@@ -50,7 +50,6 @@ function createComputerHierarchy() {
             if(!(value instanceof Battery)) {
                 throw new TypeError;
             }
-
             this._battery = value;
         }
     }
@@ -58,8 +57,8 @@ function createComputerHierarchy() {
     class Desktop extends Computer {
         constructor(manufacturer, processorSpeed, ram, hardDiskSpace, keyboard, monitor) {
             super(manufacturer, processorSpeed, ram, hardDiskSpace);
-            this._keyboard = keyboard;
-            this._monitor = monitor;
+            this.keyboard = keyboard;
+            this.monitor = monitor;
         }
         
         get keyboard() {
@@ -96,9 +95,3 @@ function createComputerHierarchy() {
         Desktop
     }
 }
-
-// let b = new Battery('asd', 45);
-// let l = new Laptop("Hewlett Packard",2.4,4,0.5,3.12,"Silver",'pesho');
-// console.log(b instanceof Battery)
-
-createComputerHierarchy()
