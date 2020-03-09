@@ -1,33 +1,39 @@
 function createComputerHierarchy() {
-    class Battery {
-        constructor(manufacturer, expectedLife) {
+    class Manufacturable {
+        constructor(manufacturer) {
             this.manufacturer = manufacturer;
+        }
+    }
+
+    class Battery extends Manufacturable {
+        constructor(manufacturer, expectedLife) {
+            super(manufacturer);
             this.expectedLife = expectedLife;
         }
     }
 
-    class Keyboard {
+    class Keyboard extends Manufacturable {
         constructor(manufacturer, responseTime) {
-            this.manufacturer = manufacturer;
+            super(manufacturer);
             this.responseTime = responseTime;
         }
     }
 
-    class Monitor {
+    class Monitor extends Manufacturable {
         constructor(manufacturer, width, height) {
-            this.manufacturer = manufacturer;
+            super(manufacturer);
             this.width = width;
             this.height = height;
         }
     }
 
-    class Computer {
+    class Computer extends Manufacturable {
         constructor(manufacturer, processorSpeed, ram, hardDiskSpace) {
             if (new.target === Computer) {
                 throw new Error();
             }
 
-            this.manufacturer = manufacturer;
+            super(manufacturer);
             this.processorSpeed = processorSpeed;
             this.ram = ram;
             this.hardDiskSpace = hardDiskSpace;
@@ -47,7 +53,7 @@ function createComputerHierarchy() {
         }
 
         set battery(value) {
-            if(!(value instanceof Battery)) {
+            if (!(value instanceof Battery)) {
                 throw new TypeError;
             }
             this._battery = value;
@@ -60,7 +66,7 @@ function createComputerHierarchy() {
             this.keyboard = keyboard;
             this.monitor = monitor;
         }
-        
+
         get keyboard() {
             return this._keyboard;
         }
@@ -87,6 +93,7 @@ function createComputerHierarchy() {
     }
 
     return {
+        Manufacturable,
         Battery,
         Keyboard,
         Monitor,
