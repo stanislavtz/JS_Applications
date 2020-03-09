@@ -50,7 +50,7 @@ function solve() {
         }
     }
 
-    class Melolemonmelon extends Watermelon{
+    class Melolemonmelon extends Melon{
         _elements = ['Fire', 'Earth', 'Air', 'Water'];
         _element = 'Water';
 
