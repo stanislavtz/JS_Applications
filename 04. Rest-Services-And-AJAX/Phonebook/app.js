@@ -8,23 +8,19 @@ function attachEvents() {
 
     let nextId;
 
-    function getDB(){
+    function getDB() {
         return fetch('https://phonebook-448f6.firebaseio.com/phonebook.json')
-                .then(x => x.json())
-                .then(x => x.filter(x => !!x));
-    } 
+            .then(x => x.json())
+            .then(x => {
+                nextId = Object.keys(x)[Object.keys(x).length - 1];
+                return Object.entries(x);
+            })
+    }
 
     btnLoad.addEventListener('click', () => {
-        getDB()
-            .then(userToDisplay => {
-                nextId = userToDisplay.length + 1;
-                userToDisplay.forEach(user => {
-                    let personLi = document.createElement('li');
-                    personLi.textContent = `${user.person}: ${user.phone}`;
-                    phonebook.appendChild(personLi);
-                });
-            });
+        loadPhoneBook();
     });
+
 
     btnCreate.addEventListener('click', () => {
         let newPerson = {
@@ -33,13 +29,49 @@ function attachEvents() {
         }
 
         getDB()
-            .then(id => {
-                fetch(`https://phonebook-448f6.firebaseio.com/phonebook/${id.length + 1}.json`, {
-                    method: 'PUT',
-                    body: JSON.stringify(newPerson)
-                })
-            });
+        .then(
+            fetch(`https://phonebook-448f6.firebaseio.com/phonebook/${Number(nextId) + 1}.json`, {
+                method: 'PUT',
+                body: JSON.stringify(newPerson)
+            })
+            .then(() => {
+                person.value = '';
+                phone.value = '';
+                loadPhoneBook();
+            })
+        );
     });
+
+    function loadPhoneBook() {
+        phonebook.innerHTML = '';
+        getDB()
+        .then(usersToDisplay => {
+            Array.from(usersToDisplay).forEach(([id, user]) => {
+                if (user) {
+                    let span = document.createElement('span');
+    
+                    const btnDelete = document.createElement('button');
+                    btnDelete.setAttribute('id', 'btnDelete');
+                    btnDelete.textContent = 'Delete';
+                    btnDelete.addEventListener('click', () => {
+                        fetch(`https://phonebook-448f6.firebaseio.com/phonebook/${Number(id)}.json`, {
+                            method: 'DELETE'
+                        })
+                        .then(loadPhoneBook);
+                    });
+    
+                    let personLi = document.createElement('li');
+                    
+                    personLi.textContent = `${user.person}: ${user.phone}`;
+                    personLi.append(btnDelete);
+    
+                    span.appendChild(personLi);
+    
+                    phonebook.appendChild(span);
+                }
+            });
+        });
+    }
 }
 
 attachEvents();
