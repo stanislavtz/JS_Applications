@@ -2,12 +2,12 @@ function getInfo() {
 
     const inputStopId = document.querySelector('#stopId');
     const stopName = document.querySelector('#stopName');
-
-    const busesRef = document.querySelector("#buses");
+    const bussesRef = document.querySelector("#buses");
 
     fetch('http://localhost:3000/businfo')
     .then(x => x.json())
     .then(x => {
+        bussesRef.textContent = '';
         const valueToAppend = x[inputStopId.value];
         
         if (!valueToAppend) {
@@ -21,7 +21,7 @@ function getInfo() {
             let bus = document.createElement('li');
             bus.textContent = `Bus ${busId} arrives in ${time}`;
 
-            busesRef.appendChild(bus);
+            bussesRef.appendChild(bus);
         });
     });
 }
