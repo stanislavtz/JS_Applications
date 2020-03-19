@@ -20,7 +20,7 @@ function attachEvents() {
     const errorHandler = () => {
         elements.forecast.style.display = 'block';
         elements.currentWeather.textContent = 'Error';
-        elements.upcomingWeather.textContent = '';
+        elements.upcomingWeather.style.display = 'none';
     }
 
     const jsonModifier = (j) => j.json();
@@ -68,6 +68,8 @@ function attachEvents() {
     function showCurrentForecast(today, upcomming) {
         if (elements.currentWeather.textContent = 'Error') {
             elements.currentWeather.innerHTML = ''
+            elements.upcomingWeather.style.display = 'block';
+
         }
 
         clearContent('forecasts');
