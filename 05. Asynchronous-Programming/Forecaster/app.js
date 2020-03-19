@@ -17,7 +17,11 @@ function attachEvents() {
         'd': '°'
     }
 
-    const errorHandler = (er) => console.log(er);
+    const errorHandler = () => {
+        elements.forecast.style.display = 'block';
+        elements.currentWeather.textContent = 'Error';
+        elements.upcomingWeather.textContent = '';
+    }
 
     const jsonModifier = (j) => j.json();
 
@@ -62,8 +66,11 @@ function attachEvents() {
     }
 
     function showCurrentForecast(today, upcomming) {
+        if (elements.currentWeather.textContent = 'Error') {
+            elements.currentWeather.innerHTML = ''
+        }
 
-        clearcontent('forecasts');
+        clearContent('forecasts');
 
         const { condition, high, low } = today.forecast;
         const currentForcastDiv = createHTMLElement('div', ['forecasts']);
@@ -85,7 +92,7 @@ function attachEvents() {
 
     function showUpcommingForceast({ forecast, name }) {
         
-        clearcontent('forecast-info');
+        clearContent('forecast-info');
 
         const forecastDiv = createHTMLElement('div', ['forecast-info']);
 
@@ -122,7 +129,7 @@ function attachEvents() {
         return element;
     }
 
-    function clearcontent(name) {
+    function clearContent(name) {
         if (document.querySelector(`.${name}`)) {
             document.querySelector(`.${name}`).remove();
         }
