@@ -1,7 +1,6 @@
 (async () => {
     const allCats = document.querySelector('#allCats');
     
-
     Handlebars.registerPartial(
         'cat',
         await fetch('./catTemplate.hbs').then(x => x.text())
@@ -11,7 +10,7 @@
         await fetch('./allCatsTemplate.hbs').then(x => x.text())
     );
 
-    const htmlToAdd = template({ cats: cats });
+    const htmlToAdd = template({ cats });
 
     allCats.innerHTML = htmlToAdd;
 

@@ -22,5 +22,5 @@
         new Cat('511', 511, 'Network Authentication Required', 'cat511')
     ];
 
-    window.cats = cats;
+   window.cats = cats;
 })()
