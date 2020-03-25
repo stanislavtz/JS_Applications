@@ -9,6 +9,7 @@
 
     function getTowns() {
         const townsCollection = inputRef.value.split(', ');
+
         fetch(tempFile)
             .then(data => data.text())
             .then(data => {
@@ -18,6 +19,6 @@
                 root.innerHTML = htmlToAdd;
             })
 
-            inputRef.value = '';
+        inputRef.value = '';
     }
 })()
