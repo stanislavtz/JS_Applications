@@ -30,6 +30,7 @@ class Company {
         }
 
         current.employees.push(newEmloyee);
+        
         return `New employee is hired. Name: ${username}. Position: ${position}`;
     }
 

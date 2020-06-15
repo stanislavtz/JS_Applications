@@ -1,16 +1,10 @@
 function getFibonator() {
-    let pNum = 0;
-    let cNum = 1;
+    ppn = 0;
+    pn = 1;
 
-    return function() {
-        let result = cNum;
-        [cNum, pNum] = [cNum + pNum, cNum];
-        return result;
+    return function () {
+        let res = pn;
+        [pn, ppn] = [pn + ppn, pn];
+        return res;
     }
-}
-
-let fib = getFibonator();
-
-for (let i = 0; i < 100; i++) {
-    console.log(fib())
 }
