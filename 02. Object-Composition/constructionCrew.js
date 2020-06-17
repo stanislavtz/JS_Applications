@@ -1,10 +1,10 @@
-function solve(warker) {
-    const requaredWater = 0.1 * warker.weight * warker.experience;
+function solve(worker) {
+    const requaredWater = 0.1 * worker.weight * worker.experience;
 
-    if (warker.dizziness) {
-        warker.levelOfHydrated += requaredWater;
-        warker.dizziness = !warker.dizziness;
+    if (worker.dizziness) {
+        worker.levelOfHydrated += requaredWater;
+        worker.dizziness = !worker.dizziness;
     }
 
-    return warker;
+    return worker;
 }
