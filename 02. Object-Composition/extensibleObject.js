@@ -1,13 +1,16 @@
 function solution(){
-    const myObj = {
-        extend: function(template) {
-            for (const key in template) {
-                if (typeof template[key] === 'function') {
-                    Object.prototype[key] = template[key];
-                } else {
-                    this[key] = template[key];
-                }
+    const proto = {};
+    const myObj = Object.create(proto);
+
+    myObj.extend = addProperty;
+    function addProperty(template) {
+        for (const key in template) {
+            if(typeof template[key] === 'function') {
+                proto[key] = template[key];
+                continue;
             }
+
+            myObj[key] = template[key];
         }
     }
 
