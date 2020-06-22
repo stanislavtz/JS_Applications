@@ -1,16 +1,4 @@
-<<<<<<< HEAD
-function solution() {
-    const proto = {};
-    const myObj = Object.create(proto);
 
-    myObj.extend = function (template) {
-        for (const key in template) {
-            if (typeof template[key] === 'function') {
-                proto[key] = template[key];
-                continue;
-            }
-            this[key] = template[key];
-=======
 function solution(){
     const proto = {};
     const myObj = Object.create(proto);
@@ -24,7 +12,6 @@ function solution(){
             }
 
             myObj[key] = template[key];
->>>>>>> d5993f5da84f49ba6a88598614e31b0f3d620c5d
         }
     }
 
