@@ -1,5 +1,5 @@
 function solve() {
-    class hero {
+    class Hero {
         constructor(name) {
             this.name = name;
             this.health = 100;
@@ -18,7 +18,7 @@ function solve() {
         }
     }
 
-    class Mage extends hero {
+    class Mage extends Hero {
         constructor(name) {
             super(name);
             this.mana = 100;
@@ -31,7 +31,7 @@ function solve() {
         }
     }
 
-    class Fighter extends hero {
+    class Fighter extends Hero {
         constructor(name) {
             super(name);
             this.stamina = 100;

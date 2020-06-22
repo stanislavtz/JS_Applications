@@ -1,7 +1,7 @@
 (function solution() {
     String.prototype.ensureStart = function (s) {
-        if(this.substring(0, s.length) === s){
-           return this.toString();
+        if (this.substring(0, s.length) === s) {
+            return this.toString();
         }
 
         return s.concat(this);
@@ -25,22 +25,23 @@
     String.prototype.truncate = function (n) {
         if (this.length <= n) {
             return this.toString();
-        } else {
-            if(this.slice(0, n).includes(' ')){
-                return this.slice(0, n).slice(0, this.slice(0, n).trim().lastIndexOf(' ')).concat('...');
-            } else if( n >= 4) {
-                return this.slice(0, n - 3).concat('...');
-            }
-            else {
-                return '.'.repeat(n)
-            }
         }
+
+        if (this.slice(0, n).includes(' ')) {
+            return this.slice(0, n).slice(0, this.slice(0, n).trim().lastIndexOf(' ')).concat('...');
+        }
+
+        if (n >= 4) {
+            return this.slice(0, n - 3).concat('...');
+        }
+       
+        return '.'.repeat(n)
     };
 
-    String.format = function (input){
-        for (let i = 0; i < 10 ; i++) {
+    String.format = function (input) {
+        for (let i = 0; i < 10; i++) {
             if (input.includes(`${i}`)) {
-                input = input.replace(`{${i}}`, `${arguments[i + 1] ? arguments[i + 1] :`{${i}}`}`);
+                input = input.replace(`{${i}}`, `${arguments[i + 1] ? arguments[i + 1] : `{${i}}`}`);
             }
             else {
                 break;
