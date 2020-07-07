@@ -1,27 +1,29 @@
 function getInfo() {
-
-    const inputStopId = document.querySelector('#stopId');
+    const stopId = document.querySelector('#stopId');
     const stopName = document.querySelector('#stopName');
-    const bussesRef = document.querySelector("#buses");
+    const buses = document.querySelector("#buses");
 
-    fetch('http://localhost:3000/businfo')
-    .then(x => x.json())
-    .then(x => {
-        bussesRef.textContent = '';
-        const valueToAppend = x[inputStopId.value];
-        
-        if (!valueToAppend) {
-            stopName.textContent = 'Error';
-            return;
-        }
-        
-        stopName.textContent = valueToAppend.name;
+    const url = `https://judgetests.firebaseio.com/businfo/${stopId.value}.json`;
 
-        Object.entries(valueToAppend.buses).forEach(([busId, time]) => {
-            let bus = document.createElement('li');
-            bus.textContent = `Bus ${busId} arrives in ${time}`;
+    fetch(url)
+        .then(x => x.json())
+        .then(res => {
+            buses.textContent = '';
+            stopName.textContent = res.name;
 
-            bussesRef.appendChild(bus);
-        });
-    });
+            Object.entries(res.buses).forEach(([busId, time]) => {
+                const li = document.createElement('li');
+                li.textContent = `Bus ${busId} arrives in ${time}`;
+                buses.appendChild(li);
+            });
+
+            stopId.value = '';
+        })
+        .catch((err) => {
+            stopName.textContent = "Error";
+            stopId.value = '';
+            buses.textContent = '';
+
+            throw new Error('Invalid busstop name!!!');
+        })
 }
