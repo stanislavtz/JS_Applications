@@ -25,5 +25,5 @@ function getInfo() {
             buses.textContent = '';
 
             throw new Error('Invalid busstop name!!!');
-        })
+        });
 }
