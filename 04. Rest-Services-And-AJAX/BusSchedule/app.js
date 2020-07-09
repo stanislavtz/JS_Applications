@@ -3,12 +3,13 @@ function solve() {
     const departBtn = document.querySelector('#depart');
     const arriveBtn = document.querySelector('#arrive');
 
-    const baseUrl = `https://bus-schedule-3c03a.firebaseio.com/busSchedule`;
+    const baseUrl = `https://bus-schedule-3c03a.firebaseio.com/busSchedule/schedule/`;
 
     let stopId = 'depot';
+    let tempStop;
 
     const getUrl = function (id) {
-        return `${baseUrl}/schedule/${id}.json`;
+        return baseUrl + `${id}.json`;
     }
 
     function depart() {
@@ -16,6 +17,7 @@ function solve() {
             .then(res => res.json())
             .then(busStop => {
                 busInfo.textContent = `Next stop ${busStop.name}`;
+                tempStop = busStop;
             });
 
         departBtn.disabled = true;
@@ -23,13 +25,8 @@ function solve() {
     }
 
     function arrive() {
-        const depotId = stopId
-        fetch(getUrl(stopId))
-            .then(res => res.json())
-            .then(busStop => {
-                busInfo.textContent = `Arriving at ${busStop.name}`;
-                stopId = busStop.next;
-            });
+        busInfo.textContent = `Arriving at ${tempStop.name}`;
+        stopId = tempStop.next;
 
         departBtn.disabled = false;
         arriveBtn.disabled = true;
