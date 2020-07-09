@@ -3,9 +3,11 @@ function getInfo() {
     const stopName = document.querySelector('#stopName');
     const buses = document.querySelector("#buses");
 
-    const url = `https://judgetests.firebaseio.com/businfo/${stopId.value}.json`;
+    const url = function(id) {
+        return `http://localhost:8000/businfo/${id.value}.json`;
+    } 
 
-    fetch(url)
+    fetch(url(stopId))
         .then(x => x.json())
         .then(res => {
             buses.textContent = '';
