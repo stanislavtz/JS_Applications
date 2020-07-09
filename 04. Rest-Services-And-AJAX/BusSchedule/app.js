@@ -1,36 +1,35 @@
 function solve() {
-    const connectionRef = document.querySelector('.info');
+    const busInfo = document.querySelector('.info');
     const departBtn = document.querySelector('#depart');
     const arriveBtn = document.querySelector('#arrive');
 
-    let currentStopId = '';
+    const baseUrl = `https://bus-schedule-3c03a.firebaseio.com/busSchedule`;
 
-    function getBusInfo(id){
-        if(!id) {
-            id = 'depot';
-        }
+    let stopId = 'depot';
 
-        return fetch(`http://localhost:8000//schedule/${id}.json`);
+    const getUrl = function (id) {
+        return `${baseUrl}/schedule/${id}.json`;
     }
 
     function depart() {
-        getBusInfo(currentStopId)
-        .then(x => x.json())
-        .then(x => {
-            connectionRef.textContent = `Next stop ${x.name}`;
-        });
+        fetch(getUrl(stopId))
+            .then(res => res.json())
+            .then(busStop => {
+                busInfo.textContent = `Next stop ${busStop.name}`;
+            });
 
         departBtn.disabled = true;
         arriveBtn.disabled = false;
     }
 
     function arrive() {
-        getBusInfo(currentStopId)
-        .then(x => x.json())
-        .then(x => {
-            connectionRef.textContent = `Arriving at ${x.name}`;
-            currentStopId = x.next;
-        });
+        const depotId = stopId
+        fetch(getUrl(stopId))
+            .then(res => res.json())
+            .then(busStop => {
+                busInfo.textContent = `Arriving at ${busStop.name}`;
+                stopId = busStop.next;
+            });
 
         departBtn.disabled = false;
         arriveBtn.disabled = true;

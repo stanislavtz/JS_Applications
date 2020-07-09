@@ -1,3 +1,3 @@
-use the link below to open created database in firebase.com:
+Use the link below to open created database in firebase.com:
 
-https://bus-schedule-3c03a.firebaseio.com/
+https://bus-schedule-3c03a.firebaseio.com/busSchedule/
