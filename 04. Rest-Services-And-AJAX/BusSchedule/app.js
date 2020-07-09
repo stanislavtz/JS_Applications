@@ -10,7 +10,7 @@ function solve() {
             id = 'depot';
         }
 
-        return fetch(`https://bus-schedule-3c03a.firebaseio.com/schedule/${id}.json`);
+        return fetch(`http://localhost:8000//schedule/${id}.json`);
     }
 
     function depart() {
