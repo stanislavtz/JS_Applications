@@ -1,77 +1,54 @@
-function attachEvents() {
-    const btnLoad = document.getElementById('btnLoad');
-    const btnCreate = document.getElementById('btnCreate');
+import * as data from './data.js';
+import el from './createElement.js';
 
-    const person = document.getElementById('person');
-    const phone = document.getElementById('phone');
-    const phonebook = document.getElementById('phonebook');
+window.addEventListener('load', () => {
 
-    let nextId;
-
-    function getDB() {
-        return fetch('https://phonebook-448f6.firebaseio.com/phonebook.json')
-            .then(x => x.json())
-            .then(x => {
-                nextId = Object.keys(x)[Object.keys(x).length - 1];
-                return Object.entries(x);
-            })
-    }
-
-    btnLoad.addEventListener('click', () => {
-        loadPhoneBook();
-    });
-
-
-    btnCreate.addEventListener('click', () => {
-        let newPerson = {
-            person: person.value,
-            phone: phone.value
-        }
-
-        getDB()
-        .then(
-            fetch(`https://phonebook-448f6.firebaseio.com/phonebook/${Number(nextId) + 1}.json`, {
-                method: 'PUT',
-                body: JSON.stringify(newPerson)
-            })
-            .then(() => {
-                person.value = '';
-                phone.value = '';
-                loadPhoneBook();
-            })
-        );
-    });
-
-    function loadPhoneBook() {
-        phonebook.innerHTML = '';
-        getDB()
-        .then(usersToDisplay => {
-            Array.from(usersToDisplay).forEach(([id, user]) => {
-                if (user) {
-                    let span = document.createElement('span');
+    function attachEvents() {
+        const loadBtn = document.querySelector("#btnLoad");
+        const createBtn = document.querySelector("#btnCreate");
+        const contactsList = document.querySelector('#phonebook');
     
-                    const btnDelete = document.createElement('button');
-                    btnDelete.setAttribute('id', 'btnDelete');
-                    btnDelete.textContent = 'Delete';
-                    btnDelete.addEventListener('click', () => {
-                        fetch(`https://phonebook-448f6.firebaseio.com/phonebook/${Number(id)}.json`, {
-                            method: 'DELETE'
-                        })
-                        .then(loadPhoneBook);
+        loadBtn.addEventListener('click', loadContacts);
+        createBtn.addEventListener('click', createContact);
+    
+        async function loadContacts() {
+            contactsList.textContent = '';
+    
+            let contacts = await data.loadContacts();
+    
+            try {
+                Object.entries(contacts).forEach(([contactId, info]) => {
+                    const li = el('li', `${info.person}: ${info.phone}`);
+                    const delBtn = el('button', 'Delete');
+                    delBtn.addEventListener('click', async () => {
+                        await data.deleteContact(contactId);
+                        await loadContacts();
                     });
+        
+                    li.appendChild(delBtn);
+                    contactsList.appendChild(li);
+                });
+            } catch (error) {
+                contactsList.textContent = "The phonebook is empty!!!"
+            }
     
-                    let personLi = document.createElement('li');
-                    
-                    personLi.textContent = `${user.person}: ${user.phone}`;
-                    personLi.append(btnDelete);
+        }
     
-                    span.appendChild(personLi);
+        async function createContact() {
+            const person = document.querySelector('#person');
+            const phone = document.querySelector('#phone');
+            const contact = {
+                person: person.value,
+                phone: phone.value
+            }
     
-                    phonebook.appendChild(span);
-                }
-            });
-        });
+            await data.createContact(contact);
+            await loadContacts();
+    
+            person.value = '';
+            phone.value = '';
+    
+        }
     }
-}
-
-attachEvents();
+    attachEvents();
+})

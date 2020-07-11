@@ -2,10 +2,10 @@ function getInfo() {
     const stopId = document.querySelector('#stopId');
     const buses = document.querySelector("div ul");
     const stopName = document.querySelector("#stopName");
-    const baseUrl = `https://bus-schedule-3c03a.firebaseio.com/busStop`;
+    const baseUrl = `https://bus-schedule-3c03a.firebaseio.com/busStop/businfo/`;
 
     const url = function (id) {
-        return `${baseUrl}/businfo/${id}.json`;
+        return `${baseUrl}${id}.json`;
     }
 
     fetch(url(stopId.value))
