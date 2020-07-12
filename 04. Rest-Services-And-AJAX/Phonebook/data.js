@@ -1,19 +1,22 @@
 function getUrl(endPoint) {
-    return `https://bus-schedule-3c03a.firebaseio.com/phonebook/${endPoint}.json`
+    return `https://bus-schedule-3c03a.firebaseio.com/phonebook/${endPoint}.json`;
 }
 
-export async function loadContacts() {
-    return await (await fetch(getUrl(''))).json();
+export function loadContacts() {
+    return fetch(getUrl('')).then(r => r.json());
 }
 
-export async function createContact(contact) {
-    console.log(getUrl(''))
-    return await (await fetch(getUrl(''), {
+export function createContact(contact) {
+    return fetch(getUrl(''), {
         method: 'POST',
         body: JSON.stringify(contact)
-    })).json();
+    })
+        .then(r => r.json());
 }
 
-export async function deleteContact(id) {
-    return await (await fetch(getUrl(id), { method: "DELETE" })).json();
+export function deleteContact(id) {
+    return fetch(getUrl(id), {
+        method: "DELETE"
+    })
+        .then(r => r.json());
 }

@@ -1,6 +1,8 @@
 import * as data from './data.js';
 import el from './createElement.js';
 
+window.addEventListener('load', attachEvents);
+
 function attachEvents() {
     const loadBtn = document.querySelector("#btnLoad");
     const createBtn = document.querySelector("#btnCreate");
@@ -20,7 +22,7 @@ function attachEvents() {
                 const delBtn = el('button', 'Delete');
                 delBtn.addEventListener('click', async () => {
                     await data.deleteContact(contactId);
-                    await loadContacts();
+                    loadContacts();
                 });
     
                 li.appendChild(delBtn);
@@ -41,11 +43,12 @@ function attachEvents() {
         }
 
         await data.createContact(contact);
-        await loadContacts();
+        loadContacts();
 
         person.value = '';
         phone.value = '';
 
     }
 }
-attachEvents();
+
+// attachEvents();
