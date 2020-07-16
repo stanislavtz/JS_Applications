@@ -1,5 +1,9 @@
-(function listTowns() {
-    const tempFile = './template.hbs';
+(async function listTowns() {
+    const townTemplate = await fetch('./town.hbs').then(r => r.text());
+    const townsTemplate = await fetch('./towns.hbs').then(r => r.text());
+
+    Handlebars.registerPartial('town', townTemplate);
+    const template = Handlebars.compile(townsTemplate);
 
     const inputRef = document.querySelector('#towns');
     const loadBtn = document.querySelector('#btnLoadTowns');
@@ -8,18 +12,11 @@
     loadBtn.addEventListener('click', getTowns);
 
     async function getTowns() {
-        const townsCollection = inputRef.value
+        const towns = inputRef.value
             .split(', ')
             .sort((a, b) => a.localeCompare(b));
-        
-        const obj = {
-            towns: townsCollection
-        }
 
-        const res = await fetch(tempFile);
-        const data = await res.text();
-        const template = Handlebars.compile(data);
-        const htmlToAdd = template(obj);
+        const htmlToAdd = template({ towns });
 
         root.innerHTML = htmlToAdd;
 
