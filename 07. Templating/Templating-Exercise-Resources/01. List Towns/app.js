@@ -7,17 +7,21 @@
 
     loadBtn.addEventListener('click', getTowns);
 
-    function getTowns() {
-        const townsCollection = inputRef.value.split(', ');
+    async function getTowns() {
+        const townsCollection = inputRef.value
+            .split(', ')
+            .sort((a, b) => a.localeCompare(b));
+        
+        const obj = {
+            towns: townsCollection
+        }
 
-        fetch(tempFile)
-            .then(data => data.text())
-            .then(data => {
-                const template = Handlebars.compile(data);
-                const htmlToAdd = template({towns: townsCollection});
+        const res = await fetch(tempFile);
+        const data = await res.text();
+        const template = Handlebars.compile(data);
+        const htmlToAdd = template(obj);
 
-                root.innerHTML = htmlToAdd;
-            })
+        root.innerHTML = htmlToAdd;
 
         inputRef.value = '';
     }
