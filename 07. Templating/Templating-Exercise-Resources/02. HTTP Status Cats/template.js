@@ -1,6 +1,6 @@
 (async () => {
     const allCats = document.querySelector('#allCats');
-    
+
     Handlebars.registerPartial(
         'cat',
         await fetch('./catTemplate.hbs').then(x => x.text())
@@ -14,23 +14,18 @@
 
     allCats.innerHTML = htmlToAdd;
 
-    const catsBtns = document.querySelectorAll('button.showBtn');
+    allCats.addEventListener('click', (e) => {
+        if (e.target.localName !== 'button') { return }
 
-    catsBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const parent = e.target.parentNode;
-            const statusDiv = parent.querySelector(`.status`);
+        const infoDiv = e.target.parentElement.querySelector('.status');
+        let { display } = infoDiv.style;
 
-            const { display } = statusDiv.style;
-
-            if(display === 'none') {
-                statusDiv.style.display = 'block';
-                btn.textContent =  'Hide status code';
-            }
-            else {
-                statusDiv.style.display = 'none';
-                btn.textContent =  'Show status code';
-            }
-        });
+        if(display === 'none') {
+            e.target.textContent = 'Hide status code';
+            infoDiv.style.display = 'block';
+        } else {
+            e.target.textContent = 'Show status code';
+            infoDiv.style.display = 'none';
+        }
     });
 })()

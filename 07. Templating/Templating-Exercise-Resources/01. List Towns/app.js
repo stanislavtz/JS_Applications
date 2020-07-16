@@ -1,9 +1,9 @@
 (async function listTowns() {
-    const townTemplate = await fetch('./town.hbs').then(r => r.text());
-    const townsTemplate = await fetch('./towns.hbs').then(r => r.text());
+    const townString = await fetch('./townTemplate.hbs').then(r => r.text());
+    const allTownsString = await fetch('./allTownsTemplate.hbs').then(r => r.text());
 
-    Handlebars.registerPartial('town', townTemplate);
-    const template = Handlebars.compile(townsTemplate);
+    Handlebars.registerPartial('town', townString);
+    const template = Handlebars.compile(allTownsString);
 
     const inputRef = document.querySelector('#towns');
     const loadBtn = document.querySelector('#btnLoadTowns');
