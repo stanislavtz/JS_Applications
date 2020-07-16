@@ -1,38 +1,27 @@
 import { monkeys } from "./monkeys.js";
-
 (async () => {
-
     Handlebars.registerPartial(
         'monkey',
         await fetch('./monkeyTemplate.hbs').then(x => x.text())
     );
 
-    const template = Handlebars.compile(await fetch('./allMonkeysTemplate.hbs').then(x => x.text()));
+    const templateFn = Handlebars.compile(await fetch('./allMonkeysTemplate.hbs').then(x => x.text()));
 
-    const htmlToAdd = template({ monkeys });
+    const htmlToAdd = templateFn({ monkeys });
 
-    console.log(htmlToAdd);
+    document.querySelector('section').innerHTML = htmlToAdd;
 
-    document.querySelector('section').innerHTML += htmlToAdd;
+    document.querySelector('.monkeys').addEventListener('click', (e) => {
+        if(e.target.localName !== 'button') { return }
 
-    const infoBtns = document.querySelectorAll('button');
+        const p = e.target.parentNode.querySelector('p');
 
-    infoBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const parent = e.target.parentNode;
-            const currentInfo = parent.querySelector(`p`);
+        const { display } = p.style;
 
-            const { display } = currentInfo.style;
-
-            if (display === 'none') {
-                currentInfo.style.display = 'block';
-            }
-            else {
-                currentInfo.style.display = 'none';
-            }
-        });
+        if(display === 'none') {
+            p.style.display = 'block';
+        } else  {
+            p.style.display = 'none'
+        }
     });
 })()
-
-
-

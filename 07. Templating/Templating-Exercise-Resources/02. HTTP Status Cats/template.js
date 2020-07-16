@@ -6,11 +6,11 @@
         await fetch('./catTemplate.hbs').then(x => x.text())
     );
 
-    const template = Handlebars.compile(
+    const templateFn = Handlebars.compile(
         await fetch('./allCatsTemplate.hbs').then(x => x.text())
     );
 
-    const htmlToAdd = template({ cats });
+    const htmlToAdd = templateFn({ cats });
 
     allCats.innerHTML = htmlToAdd;
 

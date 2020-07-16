@@ -3,7 +3,7 @@
     const allTownsString = await fetch('./allTownsTemplate.hbs').then(r => r.text());
 
     Handlebars.registerPartial('town', townString);
-    const template = Handlebars.compile(allTownsString);
+    const templateFn = Handlebars.compile(allTownsString);
 
     const inputRef = document.querySelector('#towns');
     const loadBtn = document.querySelector('#btnLoadTowns');
@@ -16,7 +16,7 @@
             .split(', ')
             .sort((a, b) => a.localeCompare(b));
 
-        const htmlToAdd = template({ towns });
+        const htmlToAdd = templateFn({ towns });
 
         root.innerHTML = htmlToAdd;
 
