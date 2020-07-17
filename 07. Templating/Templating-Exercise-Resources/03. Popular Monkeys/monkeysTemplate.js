@@ -6,11 +6,9 @@ import monkeys from "./monkeys.js";
     );
 
     const templateFn = Handlebars.compile(await fetch('./allMonkeysTemplate.hbs').then(x => x.text()));
-
     const htmlToAdd = templateFn({ monkeys });
 
     document.querySelector('section').innerHTML = htmlToAdd;
-
     document.querySelector('.monkeys').addEventListener('click', (e) => {
         if(e.target.localName !== 'button') { return }
 
