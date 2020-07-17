@@ -1,4 +1,4 @@
-import { monkeys } from "./monkeys.js";
+import monkeys from "./monkeys.js";
 (async () => {
     Handlebars.registerPartial(
         'monkey',
