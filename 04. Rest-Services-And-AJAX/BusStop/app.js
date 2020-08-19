@@ -1,32 +1,33 @@
 function getInfo() {
-    const stopId = document.querySelector('#stopId');
-    const buses = document.querySelector("div ul");
-    const stopName = document.querySelector("#stopName");
-    const baseUrl = `https://bus-schedule-3c03a.firebaseio.com/busStop/businfo/`;
+    const stopIdEl = document.querySelector('#stopId');
+    const busesUl = document.querySelector("#buses");
+    const stopNameEl = document.querySelector("#stopName");
+    const baseUrl = `http://localhost:8000/businfo/`;
 
     const url = function (id) {
         return `${baseUrl}${id}.json`;
     }
 
-    fetch(url(stopId.value))
+    fetch(url(stopIdEl.value))
         .then(res => res.json())
         .then(result => {
-            buses.textContent = '';
-            stopName.textContent = result.name;
+            busesUl.textContent = '';
+            stopNameEl.textContent = result.name;
 
             Object.entries(result.buses).forEach(([busId, time]) => {
                 const li = document.createElement('li');
                 li.textContent = `Bus ${busId} arrives in ${time}`;
 
-                buses.appendChild(li);
+                busesUl.appendChild(li);
             });
         })
         .catch(err => {
-            stopName.textContent = "Error";
-            buses.textContent = '';
+            stopNameEl.textContent = "Error";
+            busesUl.textContent = '';
 
-            console.error("Invalid stopId!!!");
+            stopIdEl.placeholder = "Invalid stopId!!!";
+            setTimeout(stopIdEl.placeholder = '!!! TRY AGAIN !!!', 5000);
         });
 
-    stopId.value = '';
+    stopIdEl.value = '';
 }
