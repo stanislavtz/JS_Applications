@@ -1,33 +1,28 @@
-function getInfo() {
+async function getInfo() {
     const stopIdEl = document.querySelector('#stopId');
-    const busesUl = document.querySelector("#buses");
     const stopNameEl = document.querySelector("#stopName");
-    const baseUrl = `http://localhost:8000/businfo/`;
+    const busesUl = document.querySelector("#buses");
 
+    const baseUrl = `http://localhost:8000/businfo/`;
     const url = function (id) {
         return `${baseUrl}${id}.json`;
     }
 
-    fetch(url(stopIdEl.value))
-        .then(res => res.json())
-        .then(result => {
-            busesUl.textContent = '';
-            stopNameEl.textContent = result.name;
+    try {
+        busesUl.textContent = '';
 
-            Object.entries(result.buses).forEach(([busId, time]) => {
-                const li = document.createElement('li');
-                li.textContent = `Bus ${busId} arrives in ${time}`;
+        let result = await fetch(url(stopIdEl.value)).then(r => r.json());
+        stopNameEl.textContent = result.name;
 
-                busesUl.appendChild(li);
-            });
-        })
-        .catch(err => {
-            stopNameEl.textContent = "Error";
-            busesUl.textContent = '';
-
-            stopIdEl.placeholder = "Invalid stopId!!!";
-            setTimeout(stopIdEl.placeholder = '!!! TRY AGAIN !!!', 5000);
+        Object.entries(result.buses).forEach(([busId, bTime]) => {
+            const li = document.createElement('li');
+            li.textContent = `Bus ${busId} arrives in ${bTime}`;
+            busesUl.appendChild(li);
         });
+    } catch (error) {
+        stopNameEl.textContent = 'Error';
+        return;
+    } 
 
     stopIdEl.value = '';
 }
