@@ -14,41 +14,47 @@ function attachEvents() {
     async function loadContacts() {
         contactsList.textContent = '';
 
-        let contacts = await data.loadContacts();
+        let contacts = Object.entries(await data.loadContacts());
 
         try {
-            Object.entries(contacts).forEach(([contactId, info]) => {
+            if(contacts.length === 0) { throw new Error()}
+
+            contacts.forEach(([contactId, info]) => {
                 const li = el('li', `${info.person}: ${info.phone}`);
                 const delBtn = el('button', 'Delete');
-                delBtn.addEventListener('click', async () => {
+                delBtn.addEventListener('click', async (e) => {
+                    e.target.parentNode.remove();
                     await data.deleteContact(contactId);
-                    loadContacts();
                 });
     
                 li.appendChild(delBtn);
                 contactsList.appendChild(li);
             });
         } catch (error) {
-            contactsList.textContent = "The phonebook is empty!!!"
+            contactsList.textContent = "The phonebook is empty!!!";
         }
 
     }
 
     async function createContact() {
-        const person = document.querySelector('#person');
-        const phone = document.querySelector('#phone');
-        const contact = {
-            person: person.value,
-            phone: phone.value
+        try {
+            const person = document.querySelector('#person');
+            const phone = document.querySelector('#phone');
+            const contact = {
+                person: person.value,
+                phone: phone.value
+            }
+    
+            if(!(contact.person && contact.phone)) {
+                throw new Error()
+            }
+            await data.createContact(contact);
+            loadContacts();
+    
+            person.value = '';
+            phone.value = '';
+        } catch (error) {
+            contactsList.textContent = "Please fill all filds!!!";
         }
-
-        await data.createContact(contact);
-        loadContacts();
-
-        person.value = '';
-        phone.value = '';
-
     }
 }
-
-// attachEvents();

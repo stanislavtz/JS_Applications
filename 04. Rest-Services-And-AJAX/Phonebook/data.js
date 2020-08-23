@@ -1,9 +1,9 @@
 function getUrl(endPoint) {
-    return `https://bus-schedule-3c03a.firebaseio.com/phonebook/${endPoint}.json`;
+    return `http://localhost:8000/phonebook/${endPoint}`;
 }
 
 export function loadContacts() {
-    return fetch(getUrl('')).then(r => r.json());
+    return fetch(getUrl(``)).then(r => r.json());
 }
 
 export function createContact(contact) {
@@ -15,7 +15,7 @@ export function createContact(contact) {
 }
 
 export function deleteContact(id) {
-    return fetch(getUrl(id), {
+    return fetch(getUrl(`${id}`), {
         method: "DELETE"
     })
         .then(r => r.json());

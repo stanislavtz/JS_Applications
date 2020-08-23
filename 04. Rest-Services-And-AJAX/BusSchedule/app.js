@@ -9,26 +9,23 @@ let result = (function solve() {
         return baseUrl + `${id}.json`;
     }
     
-    let stopId = 'depot';
-    let tempStop;
+    let currentId = 'depot';
+    let currentStop;
+    let result;
 
-    function depart() {
-        fetch(getUrl(stopId))
-            .then(res => res.json())
-            .then(busStop => {
-                console.log(busStop)
-                busInfo.textContent = `Next stop ${busStop.name}`;
-                tempStop = busStop;
-            });
+    async function depart() {
+        result = await fetch(getUrl(currentId)).then(r => r.json());
+
+        busInfo.textContent = `Next stop ${result.name}`;
+        currentStop = result.name;
+        currentId = result.next;
 
         departBtn.disabled = true;
         arriveBtn.disabled = false;
     }
 
-    function arrive() {
-        busInfo.textContent = `Arriving at ${tempStop.name}`;
-        stopId = tempStop.next;
-
+    async function arrive() {
+        busInfo.textContent = `Arriving at ${currentStop}`;
         departBtn.disabled = false;
         arriveBtn.disabled = true;
     }
