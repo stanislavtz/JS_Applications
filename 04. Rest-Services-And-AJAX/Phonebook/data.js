@@ -7,16 +7,18 @@ export function loadContacts() {
 }
 
 export function createContact(contact) {
-    return fetch(getUrl(''), {
+    const obj = {
         method: 'POST',
         body: JSON.stringify(contact)
-    })
-        .then(r => r.json());
+    };
+
+    return fetch(getUrl(''), obj).then(r => r.json());
 }
 
 export function deleteContact(id) {
-    return fetch(getUrl(`${id}`), {
+    const obj = {
         method: "DELETE"
-    })
-        .then(r => r.json());
+    };
+    
+    return fetch(getUrl(`${id}`), obj).then(r => r.json());
 }
