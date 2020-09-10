@@ -1,28 +1,26 @@
+const stopIdEl = document.querySelector('#stopId');
+const stopNameEl = document.querySelector('#stopName');
+const busesListEl = document.querySelector('#buses');
+const url = 'http://localhost:8000/businfo/';
+
+function getUrl(endPoint) {
+    return `${url}${endPoint}`;
+}
+
 async function getInfo() {
-    const stopIdEl = document.querySelector('#stopId');
-    const stopNameEl = document.querySelector("#stopName");
-    const busesUl = document.querySelector("#buses");
-
-    const baseUrl = `http://localhost:8000/businfo/`;
-    const url = function (id) {
-        return `${baseUrl}${id}.json`;
-    }
-
+    busesListEl.textContent = '';
     try {
-        busesUl.textContent = '';
-
-        let result = await fetch(url(stopIdEl.value)).then(r => r.json());
+        let result = await fetch(getUrl(stopIdEl.value)).then(r => r.json());
         stopNameEl.textContent = result.name;
-
-        Object.entries(result.buses).forEach(([busId, bTime]) => {
+    
+        for (const key in result.buses) {
             const li = document.createElement('li');
-            li.textContent = `Bus ${busId} arrives in ${bTime}`;
-            busesUl.appendChild(li);
-        });
+            li.textContent = `Bus ${key} arrives in ${result.buses[key]}`;
+            busesListEl.appendChild(li);
+        }
     } catch (error) {
         stopNameEl.textContent = 'Error';
-        return;
-    } 
+    }
 
     stopIdEl.value = '';
 }
