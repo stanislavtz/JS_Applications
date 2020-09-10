@@ -1,37 +1,37 @@
-let result = (function solve() {
-    const busInfo = document.querySelector('.info');
+function solve() {
     const departBtn = document.querySelector('#depart');
     const arriveBtn = document.querySelector('#arrive');
-
-    const baseUrl = `http://localhost:8000/schedule/`;
-
-    const getUrl = function (id) {
-        return baseUrl + `${id}.json`;
-    }
+    const infoEl = document.querySelector('.info');
+   
+    const url = "http://localhost:8000/schedule/";
     
-    let currentId = 'depot';
-    let currentStop;
-    let result;
+    let nextBusStop = "depot";
+    let busStop;
+    
+    function getUrl(input) {
+        return `${url}${input}`;
+    }
 
     async function depart() {
-        result = await fetch(getUrl(currentId)).then(r => r.json());
+        busStop = await fetch(getUrl(nextBusStop)).then(r => r.json());
+        nextBusStop = busStop.next;
+        infoEl.textContent = `Next stop ${busStop.name}`;
 
-        busInfo.textContent = `Next stop ${result.name}`;
-        currentStop = result.name;
-        currentId = result.next;
-
-        departBtn.disabled = true;
         arriveBtn.disabled = false;
+        departBtn.disabled = true;
     }
 
-    async function arrive() {
-        busInfo.textContent = `Arriving at ${currentStop}`;
-        departBtn.disabled = false;
+    function arrive() {
+        infoEl.textContent = `Arriving at ${busStop.name}`;
+
         arriveBtn.disabled = true;
+        departBtn.disabled = false;
     }
-
+   
     return {
         depart,
         arrive
     };
-})();
+};
+
+const result = solve(); 
