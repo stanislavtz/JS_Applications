@@ -1,9 +1,9 @@
 function getUrl(input) {
-    return `http://localhost:8000/` + input;
+    return `http://localhost:8000/phonebook/${input}`;
 }
 
 export function loadContacts() {
-    return fetch(getUrl('phonebook')).then(r => r.json());
+    return fetch(getUrl('')).then(r => r.json());
 }
 
 export function createContact(contact) {
@@ -12,11 +12,11 @@ export function createContact(contact) {
         body: JSON.stringify(contact)
     };
 
-    return fetch(getUrl('phonebook'), obj).then(r => r.json());
+    return fetch(getUrl(''), obj).then(r => r.json());
 }
 
 export function deleteContact(id) {
     const obj = { method: 'DELETE' };
 
-    return fetch(getUrl(`phonebook/${id}`), obj);
+    return fetch(getUrl(id), obj);
 }
