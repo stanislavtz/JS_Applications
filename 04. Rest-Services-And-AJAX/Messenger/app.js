@@ -1,8 +1,30 @@
-async function attachEvents() {
-    console.log('TODO...');
-    const url = `http://localhost:8000/messenger`;
-    let result = await fetch(url).then(r => r.json());
-    console.log(result)
+import * as data from "./data.js";
+
+window.addEventListener('load', attachEvents);
+
+function attachEvents() {
+    const refereshBtn = document.querySelector('#refresh');
+    const sendBtn = document.querySelector('#submit');
+
+    refereshBtn.addEventListener("click", loadMessages);
+    sendBtn.addEventListener('click', sendMessage);
 }
 
-attachEvents();
+async function sendMessage() {
+    const nameEl = document.querySelector('#author');
+    const messageEl = document.querySelector('#content');
+
+    await data.sendMessage(nameEl.value, messageEl.value);
+
+    nameEl.value = '';
+    messageEl.value = '';
+}
+
+async function loadMessages() {
+    const messageArea = document.querySelector("#messages");
+    const messagesList = await data.loadMessages();
+
+    messageArea.textContent = Object.entries(messagesList)
+        .map(([id, message]) => `${message.author}: ${message.content}`)
+        .join('\n');
+}
