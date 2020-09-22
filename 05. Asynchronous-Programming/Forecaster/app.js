@@ -1,141 +1,101 @@
+import * as data from "./data.js";
+import el from "../cr_el.js"
+
+window.addEventListener('load', attachEvents);
+
+const symbols = {
+    'sunny': "&#x2600;",
+    'partly sunny': "&#x26C5;",
+    'overcast': "&#x2601;",
+    'rain': "&#x2614;",
+    'degrees': "&#176;"
+}
+
 function attachEvents() {
-    const url = `https://judgetests.firebaseio.com/locations.json`;
 
-    const elements = {
-        inputValue: document.querySelector('#location'),
-        getBtn: document.querySelector('#submit'),
-        forecast: document.querySelector('#forecast'),
-        currentWeather: document.querySelector('#current'),
-        upcomingWeather: document.querySelector('#upcoming'),
-    }
+    const getBtn = document.querySelector(`#submit`);
+    const locationEl = document.querySelector('#location');
+    const forecastEl = document.querySelector('#forecast');
 
-    const symbols = {
-        's': '☀',
-        'p': '⛅',
-        'o': '☁',
-        'r': '☂',
-        'd': '°'
-    }
+    const currentEl = document.querySelector('#current');
+    const upcomingEl = document.querySelector('#upcoming');
 
-    const errorHandler = () => {
-        elements.forecast.style.display = 'block';
-        elements.currentWeather.textContent = 'Error';
-        elements.upcomingWeather.style.display = 'none';
-    }
+    getBtn.addEventListener('click', loadForecasts);
 
-    const jsonModifier = (j) => j.json();
+    async function loadForecasts() {
+        try {
+            let todayForecastData;
+            let upcomingForecastData;
 
-    elements.getBtn.addEventListener('click', getCurrentLocation);
+            const input = locationEl.value;
+            const locations = await data.getLocation();
+            const location = locations.find(l => l.name === input);
+            const locationCode = location.code;
+            
+            Promise.all([
+                todayForecastData = await data.getTodayForcast(locationCode),
+                upcomingForecastData = await data.getUpcommingForcasts(locationCode)                
+            ]);
 
-    function getCurrentLocation() {
-        const location = elements.inputValue.value;
-        elements.inputValue.value = '';
+            showCurrentForecast(todayForecastData);
+            showUpcomingForecasts(upcomingForecastData);
 
-        fetch(url)
-            .then(jsonModifier)
-            .then(x => {
-                const currentLocation = x.find(c => c.name === location);
-                const cityCode = currentLocation.code;
-
-                Promise.all([
-                    getCurrentWeather(cityCode),
-                    getUpcommingWeather(cityCode)
-                ])
-                .then(showCurrentLocationWeather)
-                .catch(errorHandler);
-            })
-            .catch(errorHandler);
-    }
-
-    function getCurrentWeather(code) {
-        return fetch(`https://judgetests.firebaseio.com/forecast/today/${code}.json`)
-            .then(jsonModifier)
-            .catch(errorHandler);
-    }
-
-    function getUpcommingWeather(code) {
-        return fetch(`https://judgetests.firebaseio.com/forecast/upcoming/${code}.json`)
-            .then(jsonModifier)
-            .catch(errorHandler);
-    }
-
-    function showCurrentLocationWeather([todayForrecast, upcommingForecast]) {
-        elements.forecast.style.display = 'block';
-
-        showCurrentForecast(todayForrecast, upcommingForecast);
-    }
-
-    function showCurrentForecast(today, upcomming) {
-        if (elements.currentWeather.textContent = 'Error') {
-            elements.currentWeather.innerHTML = ''
-            elements.upcomingWeather.style.display = 'block';
-
+            locationEl.value = '';
+        } catch (error) {
+            errorMessage()
         }
-
-        clearContent('forecasts');
-
-        const { condition, high, low } = today.forecast;
-        const currentForcastDiv = createHTMLElement('div', ['forecasts']);
-        const symbolSpan = createHTMLElement('span', ['condition', 'symbol'], `${symbols[condition[0].toLowerCase()]}`);
-        const conditions = createHTMLElement('span', ['condition']);
-        const degreaseData = `${low}${symbols.d}/${high}${symbols.d}`;
-        const cityNameSpan = createHTMLElement('span', ['forecast-data'], today.name);
-        const degreaseSpan = createHTMLElement('span', ['forecast-data'], degreaseData);
-        const conditionSpan = createHTMLElement('span', ['forecast-data'], condition);
-        conditions.appendChild(cityNameSpan);
-        conditions.appendChild(degreaseSpan);
-        conditions.appendChild(conditionSpan);
-        currentForcastDiv.appendChild(symbolSpan);
-        currentForcastDiv.appendChild(conditions);
-        elements.currentWeather.appendChild(currentForcastDiv);
-
-        showUpcommingForceast(upcomming);
     }
 
-    function showUpcommingForceast({ forecast, name }) {
-        
-        clearContent('forecast-info');
+    function showUpcomingForecasts(upcomingForecastData) {
+        upcomingEl.lastChild.remove();
 
-        const forecastDiv = createHTMLElement('div', ['forecast-info']);
+        const div = el('div', '', { className: 'forecast-info' });
+        upcomingEl.appendChild(div);
 
-        forecast.forEach(({ condition, high, low }) => {
-            const upcommingSpam = createHTMLElement('spam', ['upcoming']);
+        const forecasts = upcomingForecastData.forecast;
+        forecasts.forEach(forecast => {
+            const span = el('span', '', { className: 'upcoming' });
+            const symbolSpan = el('span', '', { className: 'symbol' });
+            const degreesSpan = el('span', '', { className: 'forecast-data' });
+            const weatherSpan = el('span', forecast.condition, { className: 'forecast-data' });
 
-            const symbolSpam = createHTMLElement('spam', ['symbol'], symbols[condition[0].toLowerCase()]);
+            symbolSpan.innerHTML = symbols[forecast.condition.toLowerCase()];
+            degreesSpan.innerHTML = `${forecast.low}${symbols.degrees}/${forecast.high}${symbols.degrees}`;
 
-            const degreaseInfo = `${low}${symbols.d}/${high}${symbols.d}`;
-            const degreaseSpam = createHTMLElement('spam', ['forecast-data'], degreaseInfo);
-            const weatherSpam = createHTMLElement('spam', ['forecast-data'], condition);
+            span.appendChild(symbolSpan);
+            span.appendChild(degreesSpan);
+            span.appendChild(weatherSpan);
 
-            upcommingSpam.appendChild(symbolSpam);
-            upcommingSpam.appendChild(degreaseSpam);
-            upcommingSpam.appendChild(weatherSpam);
-
-            forecastDiv.appendChild(upcommingSpam);
+            div.append(span);
         });
-
-        elements.upcomingWeather.appendChild(forecastDiv);
     }
 
-    function createHTMLElement(tagName, classNames, text) {
-        let element = document.createElement(tagName);
+    function showCurrentForecast(todayForecastData) {
+        currentEl.lastChild.remove();
+        const condition = todayForecastData.forecast.condition;
 
-        if (classNames) {
-            element.classList.add(...classNames);
-        }
+        const div = el('div', '', { className: 'forecast' });
+        const symbolSpan = el('span', '', { className: 'condition symbol' });
+        const conditionSpan = el('span', '', { className: 'condition' });
+        const locationSpan = el('span', todayForecastData.name, { className: 'forecast-data' });
+        const degreesSpan = el('span', '', { className: 'forecast-data' });
+        const weatherSpan = el('span', todayForecastData.forecast.condition, { className: 'forecast-data' });
 
-        if (text) {
-            element.textContent = text;
-        }
+        symbolSpan.innerHTML = symbols[condition.toLowerCase()];
+        degreesSpan.innerHTML = `${todayForecastData.forecast.low}${symbols.degrees}/${todayForecastData.forecast.high}${symbols.degrees}`;
 
-        return element;
+        conditionSpan.appendChild(locationSpan);
+        conditionSpan.appendChild(degreesSpan);
+        conditionSpan.appendChild(weatherSpan);
+        div.appendChild(symbolSpan);
+        div.appendChild(conditionSpan);
+        currentEl.appendChild(div);
+
+        forecastEl.style.display = "block";
     }
 
-    function clearContent(name) {
-        if (document.querySelector(`.${name}`)) {
-            document.querySelector(`.${name}`).remove();
-        }
+    function errorMessage() {
+        window.alert('Error: Wrong location. Please reenter location!')
     }
 }
 
-attachEvents();
