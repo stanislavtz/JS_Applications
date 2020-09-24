@@ -1,104 +1,104 @@
+
+import * as data from "./data.js";
+import el from "../cr_el.js";
+
+window.addEventListener("load", attachEvents)
+
+const addBtn = document.querySelector(".add");
+const inputs = document.querySelectorAll("#addForm > input");
+const allCatchesEl = document.querySelector("#catches");
+
 function attachEvents() {
-    let CREATE_URL = 'https://fisher-game.firebaseio.com/catches.json';
+    listAllCatches();
+    addBtn.addEventListener("click", addCatch);
+    allCatchesEl.addEventListener("click", deleteCatch);
+    allCatchesEl.addEventListener("click", updateCatch);
+}
 
-    document.querySelector('.load').addEventListener('click', function () {
-        fetch(CREATE_URL).then(x => x.json()).then(console.log).catch(err => console.error(err));
-    });
+async function listAllCatches() {
+    const allCatches = await data.getAllCatches();
+    allCatchesEl.innerHTML = '';
 
-    const elements = Array.from(document.querySelectorAll('#addForm input'));
-    const addBtn = document.querySelector('#addForm button.add');
+    if(!allCatches) {
+        return
+    }
     
-    addBtn.addEventListener('click', addCatch);
+    Object.entries(allCatches).forEach(([id, catchh]) => {
+        allCatchesEl.innerHTML += `<div class="catch" data-id="${id}">
+        <label>Angler</label>
+        <input type="text" class="angler" value="${catchh.angler}" />
+        <hr>
+        <label>Weight</label>      
+        <input type="number" class="weight" value="${catchh.weight}" />
+        <hr>
+        <label>Species</label>
+        <input type="text" class="species" value="${catchh.species}" />
+        <hr>
+        <label>Location</label>
+        <input type="text" class="location" value="${catchh.location}" />
+        <hr>
+        <label>Bait</label>
+        <input type="text" class="bait" value="${catchh.bait}" />
+        <hr>
+        <label>Capture Time</label>
+        <input type="number" class="captureTime" value="${catchh.captureTime}" />
+        <hr>
+        <button class="update">Update</button>
+        <button class="delete">Delete</button>
+    </div>`;
+    });
+}
 
-    async function addCatch() {
-        const currentCatch = {
-            angler: elements[0].value,
-            weight: elements[1].value,
-            species: elements[2].value,
-            location: elements[3].value,
-            bait: elements[4].value,
-            captureTime: elements[5].value
-        }
+async function addCatch() {
+    const [angler, weight, species, location, bait, captureTime] = [...inputs];
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(currentCatch)
-        }
-
-        try {
-            const response = await fetch(CREATE_URL, options);
-            const data = await response.json();
-            
-            const thisCatch = document.createElement('div');
-            thisCatch.setAttribute('class', 'catch');
-            thisCatch.setAttribute('data-id', `${data.name}`);
-
-            thisCatch.innerHTML = ` 
-                <label>Angler</label>
-                <input type="text" class="angler" value="${currentCatch.angler}" />
-                <hr>
-                <label>Weight</label>      
-                <input type="number" class="weight" value="${currentCatch.weight}" />
-                <hr>
-                <label>Species</label>
-                <input type="text" class="species" value="${currentCatch.species}" />
-                <hr>
-                <label>Location</label>
-                <input type="text" class="location" value="${currentCatch.location}" />
-                <hr>
-                <label>Bait</label>
-                <input type="text" class="bait" value="${currentCatch.bait}" />
-                <hr>
-                <label>Capture Time</label>
-                <input type="number" class="captureTime" value="${currentCatch.captureTime}" />
-                <hr>
-            `;
-
-            const updateBtn = document.createElement('button');
-            updateBtn.setAttribute("class", "update");
-            updateBtn.textContent = 'Update';
-            updateBtn.addEventListener('click', updateCatch(data.name, currentCatch));
-
-            const delBtn = document.createElement('button');
-            delBtn.setAttribute("class", "delete");
-            delBtn.textContent = 'Delete';
-            delBtn.addEventListener('click', deleteCatch(data.name));
-
-            thisCatch.appendChild(updateBtn);
-            thisCatch.appendChild(delBtn);
-
-            document.querySelector('#catches').appendChild(thisCatch);
-        } catch (err) {
-            console.error(err);
-        }
+    const catchObj = {
+        angler: angler.value,
+        weight: weight.value,
+        species: species.value,
+        location: location.value,
+        bait: bait.value,
+        captureTime: captureTime.value
     }
 
-    async function deleteCatch(id) {
-        try {
-            const delResponse = await fetch(`https://fisher-game.firebaseio.com/catches/${id}.json`, {
-                method: "DELETE",
-                headers: {
-                    'Content-type': 'application/json',
-                }
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    }
+    Promise.all([
+        await data.addCatch(catchObj),
+        listAllCatches(),
+        clearInputs([...inputs])
+    ]);
+}
 
-    async function updateCatch(id, currentCatch) {
-        try {
-            // const updResponse = await fetch(`https://fisher-game.firebaseio.com/catches/${id}.json`, {
-            //     method: "PATCH",
-            //     body: JSON.stringify(currentCatch)
-            // })
-        } catch (err) {
-            console.error(err);
-        }
+async function deleteCatch(e) {
+    if (e.target.textContent === "Delete") {
+        await data.deleteCatch(`${e.target.parentNode.dataset.id}`);
+        e.target.parentNode.remove();
     }
 }
 
-attachEvents();
+async function updateCatch(e) {
+    if (e.target.textContent === "Update") {
+        console.log();
+        const currentInputs = e.target.parentNode.querySelectorAll("input");
+        const [angler, weight, species, location, bait, captureTime] = [...currentInputs];
+
+        const obj = {
+            angler: angler.value,
+            weight: weight.value,
+            species: species.value,
+            location: location.value,
+            bait: bait.value,
+            captureTime: captureTime.value
+        }
+
+        Promise.all([
+            await data.updateCatch(`${e.target.parentNode.dataset.id}`, obj),
+            listAllCatches()
+        ]);
+    }
+}
+
+function clearInputs(arr) {
+    arr.forEach(element => {
+        element.value = '';
+    });
+}
