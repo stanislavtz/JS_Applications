@@ -1,6 +1,5 @@
 
 import * as data from "./data.js";
-import el from "../cr_el.js";
 
 window.addEventListener("load", attachEvents)
 
@@ -22,7 +21,6 @@ async function listAllCatches() {
     if(!allCatches) {
         return
     }
-    
     Object.entries(allCatches).forEach(([id, catchh]) => {
         allCatchesEl.innerHTML += `<div class="catch" data-id="${id}">
         <label>Angler</label>
@@ -77,7 +75,6 @@ async function deleteCatch(e) {
 
 async function updateCatch(e) {
     if (e.target.textContent === "Update") {
-        console.log();
         const currentInputs = e.target.parentNode.querySelectorAll("input");
         const [angler, weight, species, location, bait, captureTime] = [...currentInputs];
 
@@ -90,10 +87,7 @@ async function updateCatch(e) {
             captureTime: captureTime.value
         }
 
-        Promise.all([
-            await data.updateCatch(`${e.target.parentNode.dataset.id}`, obj),
-            listAllCatches()
-        ]);
+        await data.updateCatch(`${e.target.parentNode.dataset.id}`, obj),
     }
 }
 
