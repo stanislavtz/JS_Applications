@@ -87,7 +87,7 @@ async function updateCatch(e) {
             captureTime: captureTime.value
         }
 
-        await data.updateCatch(`${e.target.parentNode.dataset.id}`, obj),
+        await data.updateCatch(`${e.target.parentNode.dataset.id}`, obj);
     }
 }
 
