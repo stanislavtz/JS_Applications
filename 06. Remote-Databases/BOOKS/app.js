@@ -1,93 +1,84 @@
 import * as data from './data.js';
-import el from '../domElCreator.js';
+import el from '../domEl.js';
 
-(function solve() {
-    const title = document.querySelector('#title');
-    const author = document.querySelector('#author');
-    const isbn = document.querySelector('#isbn');
+const submitBtn = document.querySelector("form > button");
+const loadBooksBtn = document.querySelector("#loadBooks");
+const booksList = document.querySelector("table tbody");
 
-    const loadBtn = document.querySelector('#loadBooks');
-    loadBtn.addEventListener('click', loadBooks);
+const inputs = {
+    titleEl: document.querySelector("#title"),
+    authorEl: document.querySelector("#author"),
+    isbnEl: document.querySelector("#isbn")
+};
 
-    const submitBtn = document.querySelector('form button');
-    submitBtn.addEventListener('click', addBook);
+window.addEventListener("load", attachEvents);
 
-    async function loadBooks() {
-        const tBody = document.querySelector('tbody');
-        tBody.innerHTML = '<tr><td colspan="4"><h3>Loading...</h3></td></tr>';
+function attachEvents() {
+    loadBooksBtn.addEventListener("click", listBooks);
+    submitBtn.addEventListener("click", addBook);
+}
 
-        const books = await data.getBooks();
-        tBody.textContent = '';
+const wornningDiv = el('div', ``, {
+    className: "wrong-input"
+});
+wornningDiv.style.display = "none";
 
-        books
-            .sort((a, b) => a.title.localeCompare(b.title))
-            .sort((a, b) => a.author.localeCompare(b.author))
-            .map(b => renderBook(b));
+document.querySelector("form").appendChild(wornningDiv);
 
-        title.value = '';
-        author.value = '';
-        isbn.value = '';
-
-        function renderBook(book) {
-            const tr = el('tr');
-            const tdTilte = el('td', `${book.title}`);
-            const tdAuthor = el('td', `${book.author}`);
-            const tdISBN = el('td', `${book.isbn}`);
-            const tdBTNS = el('td');
-
-            const editBtn = el('button', 'Edit');
-
-            editBtn.addEventListener('click', async () => {
-                const newBook = {
-                    title: title.value,
-                    author: author.value,
-                    isbn: isbn.value
-                };
-                await data.updateBook(book, newBook);
-                loadBooks();
-            });
-
-            const delBtn = el('button', 'Delete');
-            delBtn.addEventListener('click', async () => {
-                await data.deleteBook(book.objectId);
-                loadBooks();
-            });
-
-            tdBTNS.appendChild(editBtn);
-            tdBTNS.appendChild(delBtn);
-
-            tr.appendChild(tdTilte);
-            tr.appendChild(tdAuthor);
-            tr.appendChild(tdISBN);
-            tr.appendChild(tdBTNS);
-
-            return tBody.appendChild(tr);
-        }
-    }
-
-    async function addBook(e) {
-        e.preventDefault();
-        const books = await data.getBooks();
-
-        const book = {
-            title: title.value,
-            author: author.value,
-            isbn: isbn.value
-        };
-
-        if(books.map(b => b.title).includes(book.title)) {
-            title.value = '';
-            title.placeholder='This title exist'
+async function addBook(e) {
+    e.preventDefault();
+    for (const key of Object.keys(inputs)) {
+        const wornEl = document.querySelector(".wrong-input")
+        if (!inputs[key].value) {
+            wornEl.textContent = `Please input correct ${key.substring(0, key.length - 2)}`;
+            wornEl.style.display = "block";
             return;
         }
-
-
-        try {
-            await data.addBook(book)
-            loadBooks();
-        } catch (error) {
-            console.error(error);
-        }
-
+        wornEl.style.display = "none";
     }
-})()
+
+    const book = {
+        title: inputs.titleEl.value,
+        author: inputs.authorEl.value,
+        isbn: inputs.isbnEl.value
+    }
+
+    Object.keys(inputs).forEach(key => inputs[key].value = '');
+    return await data.addBook(book);
+}
+
+async function listBooks() {
+    booksList.innerHTML = 'Loading...';
+    try {
+        const books = await data.loadBooks();
+        booksList.innerHTML = '';
+        books.sort((a, b) => a.author.localeCompare(b.author)).forEach(renderBook);
+    } catch (error) {
+        booksList.innerHTML = error.message;
+    }
+}
+
+function renderBook(book) {
+    const editBtn = el("button", "Edit", { "id": "edit" });
+    const deleteBtn = el("button", "Delete", { "id": "delete" });
+    const element = el("tr", [
+        el("td", book.title),
+        el("td", book.author),
+        el("td", book.isbn),
+        el("td", [
+            editBtn,
+            deleteBtn
+        ])
+    ]);
+
+    booksList.appendChild(element);
+
+    editBtn.addEventListener("click", function (e) {
+
+    });
+
+    deleteBtn.addEventListener("click", async function () {
+        element.remove();
+        await data.deleteBook(book.objectId);
+    });
+}
