@@ -16,7 +16,9 @@ window.addEventListener("load", attachEvents);
 function attachEvents() {
     loadBooksBtn.addEventListener("click", listBooks);
     submitBtn.addEventListener("click", addBook);
+    booksList.addEventListener("click", createInputTag);
 }
+
 
 const wornningDiv = el('div', ``, {
     className: "wrong-input"
@@ -73,12 +75,36 @@ function renderBook(book) {
 
     booksList.appendChild(element);
 
-    editBtn.addEventListener("click", function (e) {
+    editBtn.addEventListener("click", async function (e) {
+        const newValueElements = e.target.parentNode.parentNode.querySelectorAll("input");
+        newValueElements.forEach(element => {
+            const newValue = element.value;
+            element.parentNode.textContent = newValue;
+            element.remove();
+        });
 
+        const newInfoArray = Array.from(e.target.parentNode.parentNode.children).filter(ch => ch.children.length === 0);
+        const newBook = {
+            title: newInfoArray[0].textContent,
+            author: newInfoArray[1].textContent,
+            isbn: newInfoArray[2].textContent,
+        }
+
+        await data.updateBook(book.objectId, newBook);        
     });
 
     deleteBtn.addEventListener("click", async function () {
         element.remove();
         await data.deleteBook(book.objectId);
     });
+}
+
+function createInputTag(e) {
+    if (e.target.tagName === "TD" && e.target.children.length === 0) {
+        const element = e.target;
+        const inputEl = el("input", '', { "type": "text", "placeholder": element.textContent });
+        inputEl.value = element.textContent;
+        e.target.innerHTML = '';
+        e.target.appendChild(inputEl);
+    }
 }
