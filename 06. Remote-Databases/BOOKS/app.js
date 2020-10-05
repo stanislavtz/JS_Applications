@@ -4,6 +4,11 @@ import el from '../domEl.js';
 const submitBtn = document.querySelector("form > button");
 const loadBooksBtn = document.querySelector("#loadBooks");
 const booksList = document.querySelector("table tbody");
+const wornningDiv = el('div', ``, {
+    className: "wrong-input"
+});
+wornningDiv.style.display = "none";
+document.querySelector("form").appendChild(wornningDiv);
 
 const inputs = {
     titleEl: document.querySelector("#title"),
@@ -18,14 +23,6 @@ function attachEvents() {
     submitBtn.addEventListener("click", addBook);
     booksList.addEventListener("click", createInputTag);
 }
-
-
-const wornningDiv = el('div', ``, {
-    className: "wrong-input"
-});
-wornningDiv.style.display = "none";
-
-document.querySelector("form").appendChild(wornningDiv);
 
 async function addBook(e) {
     e.preventDefault();
