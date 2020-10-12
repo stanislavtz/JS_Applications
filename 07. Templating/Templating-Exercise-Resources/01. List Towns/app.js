@@ -16,6 +16,8 @@
             .split(', ')
             .sort((a, b) => a.localeCompare(b));
 
+        if (!towns[0]) { alert("ERROR"); return; }
+
         const htmlToAdd = templateFn({ towns });
         root.innerHTML = htmlToAdd;
         inputRef.value = '';
