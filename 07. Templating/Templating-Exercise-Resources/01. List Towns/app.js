@@ -1,6 +1,6 @@
-(async function listTowns() {
-    const townString = await fetch('./townTemplate.hbs').then(r => r.text());
-    const allTownsString = await fetch('./allTownsTemplate.hbs').then(r => r.text());
+(async function () {
+    const townString = await (await fetch('./townTemplate.hbs')).text();
+    const allTownsString = await (await fetch('./allTownsTemplate.hbs')).text();
 
     Handlebars.registerPartial('town', townString);
     const templateFn = Handlebars.compile(allTownsString);
@@ -11,15 +11,13 @@
 
     loadBtn.addEventListener('click', getTowns);
 
-    async function getTowns() {
+    function getTowns() {
         const towns = inputRef.value
             .split(', ')
             .sort((a, b) => a.localeCompare(b));
 
         const htmlToAdd = templateFn({ towns });
-
         root.innerHTML = htmlToAdd;
-
         inputRef.value = '';
     }
 })()
