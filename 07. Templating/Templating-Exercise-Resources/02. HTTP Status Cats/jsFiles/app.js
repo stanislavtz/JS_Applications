@@ -1,17 +1,12 @@
 (async () => {
     const allCats = document.querySelector('#allCats');
+    const allCatsStr = await (await fetch('./templates/allCatsTemplate.hbs')).text();
+    const catStr = await (await fetch('./templates/catTemplate.hbs')).text();
 
-    Handlebars.registerPartial(
-        'cat',
-        await fetch('./catTemplate.hbs').then(x => x.text())
-    );
-
-    const templateFn = Handlebars.compile(
-        await fetch('./allCatsTemplate.hbs').then(x => x.text())
-    );
+    Handlebars.registerPartial("cat", catStr);
+    const templateFn = Handlebars.compile(allCatsStr);
 
     const htmlToAdd = templateFn({ cats });
-
     allCats.innerHTML = htmlToAdd;
 
     allCats.addEventListener('click', (e) => {
