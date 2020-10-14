@@ -1,11 +1,11 @@
 import monkeys from "./monkeys.js";
-(async () => {
-    Handlebars.registerPartial(
-        'monkey',
-        await fetch('./templates/monkeyTemplate.hbs').then(x => x.text())
-    );
 
-    const templateFn = Handlebars.compile(await fetch('./templates/allMonkeysTemplate.hbs').then(x => x.text()));
+(async () => {
+    const monkeyEl = await (await fetch('./templates/monkeyTemplate.hbs')).text();
+    const allMonkeysEl = await (await fetch('./templates/allMonkeysTemplate.hbs')).text();
+
+    Handlebars.registerPartial('monkey', monkeyEl);
+    const templateFn = Handlebars.compile(allMonkeysEl);
     const htmlToAdd = templateFn({ monkeys });
 
     document.querySelector('section').innerHTML = htmlToAdd;
@@ -13,7 +13,6 @@ import monkeys from "./monkeys.js";
         if(e.target.localName !== 'button') { return }
 
         const p = e.target.parentNode.querySelector('p');
-
         const { display } = p.style;
 
         if(display === 'none') {
