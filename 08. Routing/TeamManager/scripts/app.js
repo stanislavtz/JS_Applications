@@ -24,6 +24,11 @@ $(() => {
         this.get('#/login', login);
 
         this.get('#/catalog', catalog);
+
+        this.get('#/logout', function() {
+            this.app.userData = false;
+            this.redirect('#/home');
+        })
     });
 
     app.run();

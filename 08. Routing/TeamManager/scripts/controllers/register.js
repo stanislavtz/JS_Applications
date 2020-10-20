@@ -6,4 +6,5 @@ export default async function reg() {
     };
     
     this.partial('./templates/register/registerPage.hbs');
+
 }

@@ -5,5 +5,23 @@ export default async function () {
         team: await this.load('./templates/catalog/team.hbs')
     }
 
-    this.partial('./templates/catalog/teamCatalog.hbs');
+
+    const data = Object.assign({}, this.app.userData);
+    data.teams = [
+        {
+            _id: "111",
+            name: "Cherry",
+            comment: "Cherry's Comments"
+        },
+        {
+            _id: "222",
+            name: "Banana",
+            comment: "Banana's Comment"
+        },
+        {
+            _id: "333",
+            name: "Peach",
+        }
+    ]
+    this.partial('./templates/catalog/teamCatalog.hbs', data);
 }
