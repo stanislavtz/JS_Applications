@@ -5,6 +5,6 @@ export default async function reg() {
         registerForm: await this.load('./templates/register/registerForm.hbs')
     };
     
-    this.partial('./templates/register/registerPage.hbs');
+    this.partial('./templates/register/registerPage.hbs', this.app.userData);
 
 }
