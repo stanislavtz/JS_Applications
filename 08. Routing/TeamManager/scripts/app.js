@@ -1,20 +1,16 @@
 import home from './controllers/home.js';
 import about from './controllers/about.js';
-import register from './controllers/register.js';
-import login from './controllers/login.js';
+import register, { registerPost } from './controllers/register.js';
+import login, { loginPost } from './controllers/login.js';
 import catalog from './controllers/catalog.js';
 import details from './controllers/details.js';
 
 $(() => {
-    const app = Sammy("#main", function() {
+    const app = Sammy("#main", function () {
         this.use("Handlebars", "hbs");
-        
+
         this.userData = {
-            username: "Stan",
-            loggedIn: true,
-            hasNoTeam: true
-        }
-        
+        };
 
         this.get('index.html', home);
         this.get('#/home', home);
@@ -23,15 +19,17 @@ $(() => {
         this.get('#/about', about);
 
         this.get('#/register', register);
-        
+        this.post('#/register', (ctx => { registerPost.call(ctx) }));
+
         this.get('#/login', login);
+        this.post('#/login', (ctx) => { loginPost.call(ctx) });
 
         this.get('#/catalog', catalog);
 
         this.get('#/catalog/:id', details);
 
-        this.get('#/logout', function() {
-            this.app.userData = false;
+        this.get('#/logout', function () {
+            this.app.userData.loggedIn = false;
             this.redirect('#/home');
         });
     });
