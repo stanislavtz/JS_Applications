@@ -10,12 +10,12 @@ const endPoints = {
     LOGIN: "users/login"
 }
 
-export async function registerFn(name, password) {
+export async function registerFn(username, password) {
     return (await fetch(host(endPoints.REGISTER), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            name,
+            username,
             password
         })
     })).json();

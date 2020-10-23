@@ -15,7 +15,6 @@ export async function loginPost() {
 
     this.app.userData.loggedIn = true;
     this.app.userData.username = this.params.username;
-
     this.redirect('#/home');
 
     return result;

@@ -9,8 +9,7 @@ $(() => {
     const app = Sammy("#main", function () {
         this.use("Handlebars", "hbs");
 
-        this.userData = {
-        };
+        this.userData = {};
 
         this.get('index.html', home);
         this.get('#/home', home);

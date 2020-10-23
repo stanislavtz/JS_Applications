@@ -12,12 +12,6 @@ export default async function reg() {
 
 export async function registerPost() {
     const result = await registerFn(this.params.username, this.params.password)
-    
-    // this.app.userData.loggedIn = true;
-    // this.app.userData.username = this.params.username;
-
     this.redirect('#/login');
-
     return result;
-    
 }
