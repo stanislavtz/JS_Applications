@@ -1,3 +1,5 @@
+import { loginFn } from '../data.js';
+
 export default async function lg() {
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
@@ -9,8 +11,12 @@ export default async function lg() {
 }
 
 export async function loginPost() {
+    const result = await loginFn(this.params.username, this.params.password);
+
     this.app.userData.loggedIn = true;
     this.app.userData.username = this.params.username;
 
     this.redirect('#/home');
+
+    return result;
 }

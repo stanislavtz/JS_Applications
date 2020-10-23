@@ -1,4 +1,4 @@
-import { register } from '../data.js' 
+import { registerFn } from '../data.js';
 
 export default async function reg() {
     this.partials = {
@@ -11,12 +11,13 @@ export default async function reg() {
 }
 
 export async function registerPost() {
-    const result = register(this.params.username, this.params.password)
+    const result = await registerFn(this.params.username, this.params.password)
     
-    this.app.userData.loggedIn = true;
-    this.app.userData.username = this.params.username;
+    // this.app.userData.loggedIn = true;
+    // this.app.userData.username = this.params.username;
 
-    this.redirect('#/home');
+    this.redirect('#/login');
 
+    return result;
     
 }
