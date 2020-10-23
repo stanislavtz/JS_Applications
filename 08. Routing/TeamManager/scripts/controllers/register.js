@@ -11,7 +11,22 @@ export default async function reg() {
 }
 
 export async function registerPost() {
-    const result = await registerFn(this.params.username, this.params.password)
-    this.redirect('#/login');
-    return result;
+    const params = this.params;
+    if (params.password !== params.repeatPassword) {
+        alert("Password don't match");
+        return;
+    }
+
+    try {
+       const result = await registerFn(this.params.username, this.params.password);
+       if(result.hasOwnProperty("errorData")) {
+           const error = new Error()
+           Object.assign(error, result);
+           throw error; 
+        }
+        this.redirect('#/login');
+    } catch (err) {
+        console.log(err);
+        alert(err.message);
+    }
 }

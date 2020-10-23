@@ -1,4 +1,3 @@
-
 function host(endPoint) {
     const appId = "9801730F-9FBC-B60F-FFEE-96D41D694A00";
     const appKey = "D206C7A6-6F60-447E-BC86-A9A6D8934ACF";
