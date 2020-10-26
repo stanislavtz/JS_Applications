@@ -1,6 +1,6 @@
 import { loginFn } from '../data.js';
 
-export default async function lg() {
+export default async function () {
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
@@ -11,11 +11,24 @@ export default async function lg() {
 }
 
 export async function loginPost() {
-    const result = await loginFn(this.params.username, this.params.password);
+    try {
+        const result = await loginFn(this.params.username, this.params.password);
 
-    this.app.userData.loggedIn = true;
-    this.app.userData.username = this.params.username;
-    this.redirect('#/home');
+        if (result.hasOwnProperty("errorData")) {
+            const error = new Error();
+            Object.assign(error, result);
+            throw error;
+        }
 
-    return result;
+        this.app.userData.loggedIn = true;
+        this.app.userData.username = result.username;
+
+        localStorage.setItem("userToken", result["user-token"]);
+        localStorage.setItem("username", result.username);
+
+        this.redirect('#/home');
+
+    } catch (error) {
+        alert(error.message);
+    }
 }
