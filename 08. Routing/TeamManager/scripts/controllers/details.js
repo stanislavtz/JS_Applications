@@ -6,7 +6,8 @@ export default async function () {
         teamControls: await this.load('./templates/catalog/teamControls.hbs')
     };
 
-    teamData = Object.assign(teamData, this.app.userData);
+    console.log(this.app.userData)
+    const team = this.app.userData.teams.find(t => t.objectId === this.params.id);
 
-    this.partial('./templates/catalog/details.hbs');
+    this.partial('./templates/catalog/details.hbs', Object.assign(team, this.app.userData));
 }

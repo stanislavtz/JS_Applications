@@ -11,24 +11,23 @@ export default async function () {
 }
 
 export async function registerPost() {
-    if (this.params.password !== this.params.repeatPassword) {
-        alert("Password don't match");
-        return;
-    }
-
     try {
+        if(this.params.password !== this.params.repeatPassword) {
+            throw new Error('Passwords don\'t match');
+        }
+        
         const result = await registerFn(this.params.username, this.params.password);
 
-        if (result.hasOwnProperty("errorData")) {
+        if(result.hasOwnProperty("errorData")){
             const error = new Error();
             Object.assign(error, result);
             throw error;
         }
 
-        this.app.params.hasNoTeam = true;
+        this.app.userData.hasNoTeam = true;
         this.redirect('#/login');
-
-    } catch (err) {
-        alert(err.message);
+        
+    } catch (error) {
+        alert(error.message);
     }
 }

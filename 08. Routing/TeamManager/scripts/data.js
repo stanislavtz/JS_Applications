@@ -6,7 +6,8 @@ function host(endPoint) {
 
 const endPoints = {
     REGISTER: "users/register",
-    LOGIN: "users/login"
+    LOGIN: "users/login",
+    TEAMS: "data/teams"
 }
 
 export async function registerFn(username, password) {
@@ -29,4 +30,22 @@ export async function loginFn(login, password) {
             password
         })
     })).json();
+}
+
+export async function createTeamFn(team) {
+    return (await fetch(host(endPoints.TEAMS), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            // "user-token": localStorage.getItem("userToken")
+        },
+        body: JSON.stringify({
+            name: team.name,
+            comment: team.comment
+        })
+    })).json();
+}
+
+export async function getAllTeams() {
+    return await (await fetch(host(endPoints.TEAMS))).json();
 }
