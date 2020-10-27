@@ -18,6 +18,7 @@ $(() => {
         this.get('index.html', home);
         this.get('#/home', home);
         this.get('/', home);
+
         this.get('#/about', about);
 
         this.get('#/register', register);
