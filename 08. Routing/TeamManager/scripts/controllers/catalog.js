@@ -1,10 +1,10 @@
 import { getAllTeams } from '../data.js'
 
 export default async function () {
-    // if (!localStorage.userToken) {
-    //     alert('Please login first!');
-    //     return;
-    // }
+    if (!localStorage.userToken) {
+        alert('Please login first!');
+        return;
+    }
 
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
@@ -12,16 +12,9 @@ export default async function () {
         team: await this.load('./templates/catalog/team.hbs')
     };
 
-    const serverTeams = await getAllTeams();
-    // if(teams.length > 0) {
-    //     this.app.userData.hasNoTeam = false;
-    // }
-    //teams.forEach(team => team.teamId = team.objectId);
-
-
     this.app.userData.teams = [
         {
-            teamId: "111",
+            objectId: "111",
             name: "Cherry",
             comment: "This is a Cherry's team",
             members: [
@@ -31,7 +24,7 @@ export default async function () {
             ]
         },
         {
-            teamId: "222",
+            objectId: "222",
             name: "Apple",
             comment: "",
             members: [
@@ -41,14 +34,14 @@ export default async function () {
             ]
         },
         {
-            teamId: "333",
+            objectId: "333",
             name: "Orange",
             comment: "This is an Orange's team!",
             members: []
         }
     ];
 
-    this.app.userData.teams.concat(serverTeams);
-
+    const serverTeams = await getAllTeams();
+    this.app.userData.teams = this.app.userData.teams.concat(serverTeams);
     this.partial('./templates/catalog/teamCatalog.hbs', this.app.userData);
 }

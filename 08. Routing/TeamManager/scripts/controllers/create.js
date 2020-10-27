@@ -12,25 +12,35 @@ export default async function () {
         createForm: await this.load('./templates/create/createForm.hbs')
     }
 
-    this.partial('./templates/create/createPage.hbs');
+    this.partial('./templates/create/createPage.hbs', this.app.userData);
 }
 
 export async function createPost() {
     const newTeam = {
         name: this.params.name,
-        comment: this.params.comment
+        comment: this.params.comment,
+        members: []
     };
 
     try {
-        const result = await createTeamFn(newTeam);
-        if(result.hasOwnProperty("errorData")) {
-            const error = new Error();
-            Object.assign(error, result);
-            throw error;
+        if(!this.params.name) {
+            throw new Error("Name must not be empty!")
         }
+
+        const result = await createTeamFn(newTeam);
+        console.log(result)
+
+        if(result.hasOwnProperty("errorData")) {
+            throw new Error(result.message);
+        }
+
+        this.app.userData.isAuthor = true;
+        this.app.userData.isOnTeam = true;
+        this.app.userData.hasNoTeam = false;
+
+        this.redirect(`#/catalog`);
+
     } catch (error) {
         alert(error.message)
     }
-
-    this.redirect('#/catalog');
 }

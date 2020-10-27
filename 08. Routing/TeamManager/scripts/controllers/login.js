@@ -15,9 +15,7 @@ export async function loginPost() {
         const result = await loginFn(this.params.username, this.params.password);
 
         if (result.hasOwnProperty("errorData")) {
-            const error = new Error();
-            Object.assign(error, result);
-            throw error;
+            throw new Error(result.message);
         }
 
         this.app.userData.loggedIn = true;

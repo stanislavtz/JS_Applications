@@ -5,14 +5,17 @@ import login, { loginPost } from './controllers/login.js';
 import catalog from './controllers/catalog.js';
 import create, { createPost } from './controllers/create.js';
 import details from './controllers/details.js';
+import edit, { editPut } from './controllers/edit.js';
 
 $(() => {
     const app = Sammy("#main", function () {
         this.use("Handlebars", "hbs");
 
         this.userData = {
-            loggedIn: false,
+            // loggedIn: false,
             hasNoTeam: true
+            // isAuthor: true,
+            // isOnTeam: true
         };
 
         this.get('index.html', home);
@@ -28,11 +31,12 @@ $(() => {
         this.post('#/login', (ctx) => { loginPost.call(ctx) });
 
         this.get('#/catalog', catalog);
+        this.get('#/catalog/:id', details);
 
         this.get('#/create', create);
         this.post('#/create', (ctx) => { createPost.call(ctx) });
 
-        this.get('#/catalog/:id', details);
+        this.get('#/edit/:id', edit);
 
         this.get('#/logout', function () {
             this.app.userData.loggedIn = false;

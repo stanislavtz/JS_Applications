@@ -21,12 +21,12 @@ export async function registerFn(username, password) {
     })).json();
 }
 
-export async function loginFn(login, password) {
+export async function loginFn(username, password) {
     return (await fetch(host(endPoints.LOGIN), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            login,
+            login: username,
             password
         })
     })).json();
@@ -37,12 +37,9 @@ export async function createTeamFn(team) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            // "user-token": localStorage.getItem("userToken")
+            "user-token": localStorage.getItem("userToken")
         },
-        body: JSON.stringify({
-            name: team.name,
-            comment: team.comment
-        })
+        body: JSON.stringify(team)
     })).json();
 }
 
