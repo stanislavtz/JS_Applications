@@ -2,7 +2,8 @@ import { createTeamFn } from '../data.js';
 
 export default async function () {
     if (!localStorage.userToken) {
-        alert('Please login first');
+        alert('Please login first!');
+        this.redirect('#/login');
         return;
     }
 
@@ -38,7 +39,7 @@ export async function createPost() {
         this.app.userData.isOnTeam = true;
         this.app.userData.hasNoTeam = false;
 
-        this.redirect(`#/catalog`);
+        this.redirect(`#/catalog/${result.objectId}`);
 
     } catch (error) {
         alert(error.message)

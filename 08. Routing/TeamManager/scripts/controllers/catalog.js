@@ -3,6 +3,7 @@ import { getAllTeams } from '../data.js'
 export default async function () {
     if (!localStorage.userToken) {
         alert('Please login first!');
+        this.redirect('#/login')
         return;
     }
 

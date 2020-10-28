@@ -1,6 +1,7 @@
 export default async function () {
     if (!localStorage.userToken) {
-        alert('Please login first');
+        alert('Please login first!');
+        this.redirect('#/login');
         return;
     }
 
