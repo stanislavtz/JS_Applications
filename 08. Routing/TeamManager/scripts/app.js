@@ -12,10 +12,7 @@ $(() => {
         this.use("Handlebars", "hbs");
 
         this.userData = {
-            // loggedIn: false,
-            hasNoTeam: true
-            // isAuthor: true,
-            // isOnTeam: true
+           hasNoTeam: true
         };
 
         this.get('index.html', home);
