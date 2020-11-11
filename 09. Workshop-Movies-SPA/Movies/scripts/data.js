@@ -38,7 +38,7 @@ async function getMovieById(id) {
 async function getMoviesByOwner(ownerId) {
     const token = localStorage.getItem("userToken");
 
-    return (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`),{
+    return (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
         headers: {
             "user-token": token
         }
@@ -93,10 +93,11 @@ async function deleteMovie(id) {
 }
 
 // buy tiket
-async function buyTicket(movieId) {
-    const token = localStorage.getItem("userToken");
+async function buyTicket(movieId, tickets) {
+    // const tickets = movie.tickets - 1;
+    // const movieId = movie.objectId;
 
-
+    return updateMovie(movieId, { tickets });
 }
 
 // register user
@@ -132,7 +133,6 @@ async function loginFn(username, password) {
 
     return result;
 }
-
 
 //logout user
 async function logoutFn() {
