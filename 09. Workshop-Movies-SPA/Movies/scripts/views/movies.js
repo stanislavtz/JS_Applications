@@ -1,6 +1,11 @@
 import { createMovie } from '../data.js'
 
 export async function catalog() {
+    const token = localStorage.getItem("userToken");
+    if(!token) {
+        return;
+    }
+    
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
@@ -10,6 +15,11 @@ export async function catalog() {
 }
 
 export async function create() {
+    const token = localStorage.getItem("userToken");
+    if(!token) {
+        return;
+    }
+
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
@@ -19,6 +29,11 @@ export async function create() {
 }
 
 export async function details() {
+    const token = localStorage.getItem("userToken");
+    if(!token) {
+        return;
+    }
+
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
@@ -28,6 +43,11 @@ export async function details() {
 }
 
 export async function edit() {
+    const token = localStorage.getItem("userToken");
+    if(!token) {
+        return;
+    }
+    
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
