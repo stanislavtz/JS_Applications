@@ -13,7 +13,7 @@ const endPoints = {
 }
 
 // get all movies
-async function getAllMovies() {
+export async function getAllMovies() {
     const token = localStorage.getItem("userToken");
 
     return (await fetch(host(endPoints.MOVIES), {
@@ -24,7 +24,7 @@ async function getAllMovies() {
 }
 
 // get movie by ID
-async function getMovieById(id) {
+export async function getMovieById(id) {
     const token = localStorage.getItem("userToken");
 
     return (await fetch(host(endPoints.MOVIES + `/${id}`), {
@@ -35,7 +35,7 @@ async function getMovieById(id) {
 }
 
 // get all movies by ownerID
-async function getMoviesByOwner(ownerId) {
+export async function getMoviesByOwner(ownerId) {
     const token = localStorage.getItem("userToken");
 
     return (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
@@ -46,7 +46,7 @@ async function getMoviesByOwner(ownerId) {
 }
 
 // create movie
-async function createMovie(movie) {
+export async function createMovie(movie) {
     const token = localStorage.getItem("userToken");
 
     const obj = {
@@ -62,7 +62,7 @@ async function createMovie(movie) {
 }
 
 // edit movie
-async function updateMovie(id, newProps) {
+export async function updateMovie(id, newProps) {
     const token = localStorage.getItem("userToken");
 
     const obj = {
@@ -78,7 +78,7 @@ async function updateMovie(id, newProps) {
 }
 
 // delete movie
-async function deleteMovie(id) {
+export async function deleteMovie(id) {
     const token = localStorage.getItem("userToken");
 
     const obj = {
@@ -93,7 +93,7 @@ async function deleteMovie(id) {
 }
 
 // buy tiket
-async function buyTicket(movieId, tickets) {
+export async function buyTicket(movieId, tickets) {
     // const tickets = movie.tickets - 1;
     // const movieId = movie.objectId;
 
@@ -101,7 +101,7 @@ async function buyTicket(movieId, tickets) {
 }
 
 // register user
-async function registerFn(username, password) {
+export async function registerFn(username, password) {
     return (await fetch(host(endPoints.REGISTER), {
         method: "POST",
         headers: {
@@ -115,7 +115,7 @@ async function registerFn(username, password) {
 }
 
 // login user
-async function loginFn(username, password) {
+export async function loginFn(username, password) {
     const result = await (await fetch(host(endPoints.LOGIN), {
         method: "POST",
         headers: {
@@ -127,18 +127,18 @@ async function loginFn(username, password) {
         })
     })).json();
 
-    localStorage.setItem('userToken', result['user-token']);
     localStorage.setItem('username', result.name);
     localStorage.setItem('userId', result.objectId);
+    localStorage.setItem('userToken', result['user-token']);
 
     return result;
 }
 
 //logout user
-async function logoutFn() {
+export async function logoutFn() {
     const token = localStorage.getItem("userToken");
 
-    return fetch(host(endPoints.LOGOUT, {
+    return await fetch(host(endPoints.LOGOUT, {
         headers: {
             "user-token": token
         }
