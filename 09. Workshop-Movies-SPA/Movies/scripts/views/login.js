@@ -1,4 +1,5 @@
 import { loginFn } from '../data.js';
+import { showError, showInfo } from '../notification.js';
 
 export default async function () {
     this.partials = {
@@ -23,10 +24,10 @@ export async function loginPost() {
         this.app.userData.userId = result.objectId;
 
         this.redirect('#/home');
-
+        showInfo('Login successful.')
         return result;
 
     } catch (error) {
-        alert(error.message);
+        showError(error.message);
     }
 }

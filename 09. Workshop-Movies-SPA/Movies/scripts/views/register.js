@@ -1,5 +1,6 @@
 import { registerFn } from '../data.js';
 import { loginFn } from '../data.js';
+import { showError, showInfo } from '../notification.js';
 
 export default async function () {
     this.partials = {
@@ -35,11 +36,12 @@ export async function registerPost() {
         this.app.userData.username = result.name;
         this.app.userData.userId = result.objectId;
         
+        showInfo('User registration successful.');
         this.redirect('#/home');
         
         return await loginFn(username, password);
 
     } catch (error) {
-        alert(error.message);
+        showError(error.message);
     }
 }

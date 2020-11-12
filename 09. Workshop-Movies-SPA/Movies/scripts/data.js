@@ -1,3 +1,5 @@
+import { beginRequest, endRequest } from './notification.js'
+
 const APP_ID = "674F6B95-0028-88D7-FF82-CF04AE5A2900";
 const API_KEY = "7B768AB1-8E6C-40B1-9AB3-AA4BB2743623";
 
@@ -14,39 +16,57 @@ const endPoints = {
 
 // get all movies
 export async function getAllMovies() {
+    beginRequest();
+
     const token = localStorage.getItem("userToken");
 
-    return (await fetch(host(endPoints.MOVIES), {
+    const result = await (await fetch(host(endPoints.MOVIES), {
         headers: {
             "user-token": token
         }
     })).json();
+
+    // localStorage.setItem('movies', JSON.stringify(result));
+    endRequest();
+    return [...result].sort((a, b) => a.title.localeCompare(b.title));
 }
 
 // get movie by ID
 export async function getMovieById(id) {
+    beginRequest();
+
     const token = localStorage.getItem("userToken");
 
-    return (await fetch(host(endPoints.MOVIES + `/${id}`), {
+    const result = (await fetch(host(endPoints.MOVIES + `/${id}`), {
         headers: {
             "user-token": token
         }
     })).json();
+
+    endRequest();
+    return result;
 }
 
 // get all movies by ownerID
 export async function getMoviesByOwner(ownerId) {
+    beginRequest();
+
     const token = localStorage.getItem("userToken");
 
-    return (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
+    const result = (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
         headers: {
             "user-token": token
         }
     })).json();
+
+    endRequest();
+    return result;
 }
 
 // create movie
 export async function createMovie(movie) {
+    beginRequest();
+
     const token = localStorage.getItem("userToken");
 
     const obj = {
@@ -58,11 +78,16 @@ export async function createMovie(movie) {
         body: JSON.stringify(movie)
     };
 
-    return (await fetch(host(endPoints.MOVIES), obj)).json();
+    const result =  (await fetch(host(endPoints.MOVIES), obj)).json();
+
+    endRequest();
+    return result;
 }
 
 // edit movie
 export async function updateMovie(id, newProps) {
+    beginRequest();
+
     const token = localStorage.getItem("userToken");
 
     const obj = {
@@ -74,11 +99,16 @@ export async function updateMovie(id, newProps) {
         body: JSON.stringify(newProps)
     };
 
-    return (await fetch(host(endPoints.MOVIES + `/${id}`), obj)).json();
+    const result = (await fetch(host(endPoints.MOVIES + `/${id}`), obj)).json();
+
+    endRequest();
+    return result;
 }
 
 // delete movie
 export async function deleteMovie(id) {
+    beginRequest();
+
     const token = localStorage.getItem("userToken");
 
     const obj = {
@@ -89,11 +119,16 @@ export async function deleteMovie(id) {
         }
     };
 
-    return (await fetch(host(endPoints.MOVIES + `/${id}`), obj)).json();
+    const result = (await fetch(host(endPoints.MOVIES + `/${id}`), obj)).json();
+
+    endRequest();
+    return result;
 }
 
 // buy tiket
 export async function buyTicket(movieId, tickets) {
+    beginRequest();
+
     // const tickets = movie.tickets - 1;
     // const movieId = movie.objectId;
 
@@ -102,7 +137,9 @@ export async function buyTicket(movieId, tickets) {
 
 // register user
 export async function registerFn(username, password) {
-    return (await fetch(host(endPoints.REGISTER), {
+    beginRequest();
+
+    const result = (await fetch(host(endPoints.REGISTER), {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -112,10 +149,15 @@ export async function registerFn(username, password) {
             password
         })
     })).json();
+
+    endRequest();
+    return result;
 }
 
 // login user
 export async function loginFn(username, password) {
+    beginRequest();
+
     const result = await (await fetch(host(endPoints.LOGIN), {
         method: "POST",
         headers: {
@@ -131,16 +173,22 @@ export async function loginFn(username, password) {
     localStorage.setItem('userId', result.objectId);
     localStorage.setItem('userToken', result['user-token']);
 
+    endRequest();
     return result;
 }
 
 //logout user
 export async function logoutFn() {
+    beginRequest();
+
     const token = localStorage.getItem("userToken");
 
-    return await fetch(host(endPoints.LOGOUT, {
+    const result = await fetch(host(endPoints.LOGOUT, {
         headers: {
             "user-token": token
         }
     }));
+
+    endRequest();
+    return result;
 }
