@@ -34,6 +34,7 @@ function loadProject() {
         
         this.get('#/details/:id', movies.details);
         this.get('#/edit/:id', movies.edit);
+        this.get('#/buy/:id', movies.buyTicket);
 
     });
 

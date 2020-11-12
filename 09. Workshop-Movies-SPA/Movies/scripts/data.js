@@ -126,11 +126,9 @@ export async function deleteMovie(id) {
 }
 
 // buy tiket
-export async function buyTicket(movieId, tickets) {
-    beginRequest();
-
-    // const tickets = movie.tickets - 1;
-    // const movieId = movie.objectId;
+export async function buyTicket(movie) {
+    const tickets = movie.tickets - 1;
+    const movieId = movie.objectId;
 
     return updateMovie(movieId, { tickets });
 }
