@@ -14,6 +14,7 @@ const endPoints = {
     MOVIES: 'data/movies_catalog'
 }
 
+// Movies data manipulation
 // get all movies
 export async function getAllMovies() {
     beginRequest();
@@ -53,14 +54,14 @@ export async function getMoviesByOwner(ownerId) {
 
     const token = localStorage.getItem("userToken");
 
-    const result = (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
+    const result = await (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
         headers: {
             "user-token": token
         }
     })).json();
 
     endRequest();
-    return result;
+    return [...result].sort((a, b) => a.title.localeCompare(b.title));
 }
 
 // create movie
@@ -133,6 +134,8 @@ export async function buyTicket(movie) {
     return updateMovie(movieId, { tickets });
 }
 
+
+// User data manipulation
 // register user
 export async function registerFn(username, password) {
     beginRequest();

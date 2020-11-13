@@ -28,6 +28,7 @@ export async function loginPost() {
         return result;
 
     } catch (error) {
+        console.error(error);
         showError(error.message);
     }
 }

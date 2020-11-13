@@ -11,6 +11,7 @@ export default async function () {
         localStorage.removeItem('username');
         localStorage.removeItem('userId');
         localStorage.removeItem('userToken');
+        localStorage.removeItem('movieId');
 
         this.app.userData = {};
         
@@ -18,6 +19,7 @@ export default async function () {
         this.redirect('#/login');
 
     } catch (error) {
+        console.error(error);
         showError(error.message);
     }
 }

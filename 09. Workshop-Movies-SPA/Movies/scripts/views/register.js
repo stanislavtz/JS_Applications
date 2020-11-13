@@ -42,6 +42,7 @@ export async function registerPost() {
         return await loginFn(username, password);
 
     } catch (error) {
+        console.error(error);
         showError(error.message);
     }
 }
