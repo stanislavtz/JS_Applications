@@ -28,14 +28,14 @@ function loadProject() {
         this.get('#/logout', logout);
 
         this.get('#/catalog', movies.catalog);
-        
+
         this.get('#/my_movies', movies.myMovies);
         
         this.get('#/create', movies.create);
         this.post('#/create', (ctx) => { movies.createPost.call(ctx); });
         
         this.get('#/edit/:id', movies.edit); 
-        this.post('#/edit', (ctx) => { movies.editPost.call(ctx); });
+        this.post('#/edit/:id', (ctx) => { movies.editPost.call(ctx); });
 
         this.get('#/details/:id', movies.details);
         this.get('#/buy/:id', movies.buyTicket);

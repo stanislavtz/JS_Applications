@@ -16,7 +16,7 @@ const endPoints = {
 
 // Movies data manipulation
 // get all movies
-export async function getAllMovies() {
+export async function getAllMovies(search) {
     beginRequest();
 
     const token = localStorage.getItem("userToken");
@@ -28,7 +28,13 @@ export async function getAllMovies() {
         }
     };
 
-    const result = (await fetch(host(endPoints.MOVIES), obj)).json();
+    let result;
+
+    if(!search) {
+        result = (await fetch(host(endPoints.MOVIES), obj)).json();
+    } else {
+        result = (await fetch(host(endPoints.MOVIES + `?where=genres%20LIKE%20%27%25${search}%25%27`), obj)).json();
+    }
 
     endRequest();
 
@@ -72,26 +78,6 @@ export async function getMoviesByOwner(ownerId) {
 
     endRequest();
 
-    return result;
-}
-
-// get movies by searched genres
-export async function filterMovies(genre) {
-    beginRequest();
-
-    const token = localStorage.getItem("userToken");
-
-    const obj = {
-        headers: {
-            "Content-Type": "application/json",
-            "user-token": token
-        }
-    };
-
-    const result = (await fetch(host(endPoints.MOVIES + `?where=genres%20LIKE%20%27${genre}%27`), obj)).json();
-
-    endRequest();
-    
     return result;
 }
 

@@ -13,11 +13,15 @@ export async function catalog() {
         movie: await this.load('./templates/movies/movie.hbs')
     }
 
-    const movies = (await getAllMovies()).sort((a, b) => b.tickets - a.tickets);
+    const search = this.params.search || '';
+
+    const movies = (await getAllMovies(search)).sort((a, b) => b.tickets - a.tickets);
     this.app.userData.movies = movies;
 
+
     const obj = {
-        origin: encodeURIComponent('#/catalog')
+        origin: encodeURIComponent('#/catalog'),
+        search
     };
 
     const context = Object.assign(obj, this.app.userData)
@@ -230,5 +234,5 @@ export async function deleteMovie() {
 }
 
 export async function filteredMovies() {
-
+    console.log(this);
 }
