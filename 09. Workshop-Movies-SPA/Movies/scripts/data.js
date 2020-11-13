@@ -21,15 +21,18 @@ export async function getAllMovies() {
 
     const token = localStorage.getItem("userToken");
 
-    const result = await (await fetch(host(endPoints.MOVIES), {
+    const obj = {
         headers: {
+            "Content-Type": "application/json",
             "user-token": token
         }
-    })).json();
+    };
 
-    // localStorage.setItem('movies', JSON.stringify(result));
+    const result = (await fetch(host(endPoints.MOVIES), obj)).json();
+
     endRequest();
-    return [...result].sort((a, b) => a.title.localeCompare(b.title));
+
+    return result;
 }
 
 // get movie by ID
@@ -38,13 +41,17 @@ export async function getMovieById(id) {
 
     const token = localStorage.getItem("userToken");
 
-    const result = (await fetch(host(endPoints.MOVIES + `/${id}`), {
+    const obj = {
         headers: {
+            "Content-Type": "application/json",
             "user-token": token
         }
-    })).json();
+    };
+
+    const result = (await fetch(host(endPoints.MOVIES + `/${id}`), obj)).json();
 
     endRequest();
+
     return result;
 }
 
@@ -54,14 +61,38 @@ export async function getMoviesByOwner(ownerId) {
 
     const token = localStorage.getItem("userToken");
 
-    const result = await (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
+    const obj = {
         headers: {
+            "Content-Type": "application/json",
             "user-token": token
         }
-    })).json();
+    };
+
+    const result = (await fetch(host(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), obj)).json();
 
     endRequest();
-    return [...result].sort((a, b) => a.title.localeCompare(b.title));
+
+    return result;
+}
+
+// get movies by searched genres
+export async function filterMovies(genre) {
+    beginRequest();
+
+    const token = localStorage.getItem("userToken");
+
+    const obj = {
+        headers: {
+            "Content-Type": "application/json",
+            "user-token": token
+        }
+    };
+
+    const result = (await fetch(host(endPoints.MOVIES + `?where=genres%20LIKE%20%27${genre}%27`), obj)).json();
+
+    endRequest();
+    
+    return result;
 }
 
 // create movie
@@ -79,9 +110,10 @@ export async function createMovie(movie) {
         body: JSON.stringify(movie)
     };
 
-    const result =  (await fetch(host(endPoints.MOVIES), obj)).json();
+    const result = (await fetch(host(endPoints.MOVIES), obj)).json();
 
     endRequest();
+
     return result;
 }
 
@@ -103,6 +135,7 @@ export async function updateMovie(id, newProps) {
     const result = (await fetch(host(endPoints.MOVIES + `/${id}`), obj)).json();
 
     endRequest();
+
     return result;
 }
 
@@ -123,12 +156,18 @@ export async function deleteMovie(id) {
     const result = (await fetch(host(endPoints.MOVIES + `/${id}`), obj)).json();
 
     endRequest();
+
     return result;
 }
 
 // buy tiket
 export async function buyTicket(movie) {
     const tickets = movie.tickets - 1;
+
+    if (tickets < 0) {
+        throw new Error('No more tickets for sale!');
+    }
+
     const movieId = movie.objectId;
 
     return updateMovie(movieId, { tickets });
@@ -152,6 +191,7 @@ export async function registerFn(username, password) {
     })).json();
 
     endRequest();
+
     return result;
 }
 
@@ -175,6 +215,7 @@ export async function loginFn(username, password) {
     localStorage.setItem('userToken', result['user-token']);
 
     endRequest();
+
     return result;
 }
 
@@ -191,5 +232,6 @@ export async function logoutFn() {
     }));
 
     endRequest();
+
     return result;
 }

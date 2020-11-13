@@ -19,7 +19,6 @@ export function showError(message) {
     elements.error.style.display = 'block';
 }
 
-
 export function beginRequest() {
     elements.loading.style.display = 'block';
 }

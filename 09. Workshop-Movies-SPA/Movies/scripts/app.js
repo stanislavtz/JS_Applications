@@ -28,7 +28,8 @@ function loadProject() {
         this.get('#/logout', logout);
 
         this.get('#/catalog', movies.catalog);
-        this.get('#/my_movies', movies.ownMovies);
+        
+        this.get('#/my_movies', movies.myMovies);
         
         this.get('#/create', movies.create);
         this.post('#/create', (ctx) => { movies.createPost.call(ctx); });
@@ -38,7 +39,7 @@ function loadProject() {
 
         this.get('#/details/:id', movies.details);
         this.get('#/buy/:id', movies.buyTicket);
-
+        this.get('#/delete/:id', movies.deleteMovie);
     });
 
     app.run();

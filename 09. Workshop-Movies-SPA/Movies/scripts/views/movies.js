@@ -1,4 +1,4 @@
-import { getAllMovies, getMoviesByOwner, getMovieById, createMovie, buyTicket as ticketBuy, updateMovie } from '../data.js';
+import { getAllMovies, getMoviesByOwner, getMovieById, createMovie, buyTicket as ticketBuy, updateMovie, deleteMovie as movieDelete } from '../data.js';
 import { showError, showInfo } from '../notification.js';
 
 export async function catalog() {
@@ -13,29 +13,43 @@ export async function catalog() {
         movie: await this.load('./templates/movies/movie.hbs')
     }
 
-    const movies = await getAllMovies();
-
+    const movies = (await getAllMovies()).sort((a, b) => b.tickets - a.tickets);
     this.app.userData.movies = movies;
 
-    this.partial("./templates/movies/catalog.hbs", this.app.userData);
+    const obj = {
+        origin: encodeURIComponent('#/catalog')
+    };
+
+    const context = Object.assign(obj, this.app.userData)
+
+    this.partial("./templates/movies/catalog.hbs", context);
 }
 
-export async function ownMovies() {
+export async function myMovies() {
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+        return;
+    }
+
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
-        ownMovie: await this.load('./templates/movies/ownMovie.hbs')
+        myMovie: await this.load('./templates/movies/myMovie.hbs')
     }
 
     const userId = localStorage.getItem('userId');
-    const ownMovies = await getMoviesByOwner(userId);
+    const myMovies = (await getMoviesByOwner(userId)).sort((a, b) => b.tickets - a.tickets);
 
-    this.app.userData.movies = ownMovies;
-    // this.app.userData.ownMovies = ownMovies;
-    const context = Object.assign({myMovie: true}, this.app.userData)
+    this.app.userData.movies = myMovies;
+
+    const obj = {
+        isMyMovies: true,
+        origin: encodeURIComponent('#/my_movies')
+    };
+
+    const context = Object.assign(obj, this.app.userData)
 
     this.partial("./templates/movies/catalog.hbs", context);
-    // this.partial("./templates/movies/ownMoviesCatalog.hbs", this.app.userData);
 }
 
 export async function create() {
@@ -75,6 +89,7 @@ export async function createPost() {
         };
 
         const result = await createMovie(movie);
+
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
         }
@@ -82,7 +97,7 @@ export async function createPost() {
         showInfo('Movie created successfully.');
 
         this.redirect(`#/details/${result.objectId}`);
-        // this.redirect('#/home');
+        
         return result;
     } catch (error) {
         console.error(error);
@@ -106,6 +121,8 @@ export async function details() {
     const movie = (await getMovieById(this.params.id));
 
     const context = Object.assign(movie, this.app.userData);
+    
+    context.origin = encodeURIComponent(`#/details/${this.params.id}`);
 
     this.partial("./templates/movies/details.hbs", context);
 }
@@ -115,7 +132,7 @@ export async function edit() {
     if (!token) {
         return;
     }
-    
+
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
@@ -141,7 +158,7 @@ export async function editPost() {
         }
 
         if (!this.params.imageUrl.startsWith('http')) {
-            throw new Error("The image should start with http:// or https://");
+            throw new Error("The image should start with \"http://\" or \"https://\".");
         }
 
         const movie = {
@@ -154,9 +171,8 @@ export async function editPost() {
 
         const movieId = localStorage.getItem('movieId');
         localStorage.removeItem('movieId');
-       
-        const result = await updateMovie(movieId, movie);
 
+        const result = await updateMovie(movieId, movie);
 
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
@@ -165,7 +181,7 @@ export async function editPost() {
         showInfo('Movie created successfully.');
 
         this.redirect(`#/details/${result.objectId}`);
-        // this.redirect('#/home');
+
         return result;
     } catch (error) {
         console.error(error);
@@ -179,14 +195,40 @@ export async function buyTicket() {
 
         const result = await ticketBuy(movie);
         if (result.hasOwnProperty('errorData')) {
+            this.redirect('#/catalog');
             throw new Error(result.message);
         }
 
         showInfo(`Successfully bought ticket for ${movie.title}!`);
 
-        this.redirect('#/catalog');
+        this.redirect(this.params.origin);
     } catch (error) {
         console.error(error);
         showError(error.message);
     }
+}
+
+export async function deleteMovie() {
+    const confirmDel = confirm("Are you sure you want to delete this movie?");
+    if(!confirmDel) {
+        return this.redirect('#/my_movies');
+    }
+
+    try {
+        const result = await movieDelete(this.params.id);
+
+        if(result.hasOwnProperty('errorData')) {
+            throw new Error(result.message);
+        }
+        
+        showInfo('Movie removed successfully!');
+
+        this.redirect('#/my_movies');
+    } catch (error) {
+        showError(error.message);
+    }
+}
+
+export async function filteredMovies() {
+
 }

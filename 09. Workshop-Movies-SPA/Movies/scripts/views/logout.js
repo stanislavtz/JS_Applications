@@ -2,6 +2,11 @@ import { logoutFn } from '../data.js';
 import { showError, showInfo } from '../notification.js';
 
 export default async function () {
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+        return;
+    }
+    
     try {
         const result = await logoutFn();
         if (result.hasOwnProperty('errorData')) {

@@ -3,7 +3,7 @@
 #notifications {
     float: right;
     position: fixed;
-    top: 0;
+    top: 45px;
     right: 0;
     text-align: center;
     margin: 1em;
