@@ -10,7 +10,8 @@ export async function catalog() {
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
-        movie: await this.load('./templates/movies/movie.hbs')
+        movie: await this.load('./templates/movies/movie.hbs'),
+        controls: await this.load('./templates/movies/movieControls.hbs')
     }
 
     const search = this.params.search || '';
@@ -38,7 +39,10 @@ export async function myMovies() {
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
-        myMovie: await this.load('./templates/movies/myMovie.hbs')
+        movie: await this.load('./templates/movies/movie.hbs'),
+        controls: await this.load('./templates/movies/myMovieControls.hbs'),
+        movieControls: await this.load('./templates/movies/movieControls.hbs')
+
     }
 
     const userId = localStorage.getItem('userId');
