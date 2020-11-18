@@ -27,7 +27,7 @@ function loadProject() {
 
         this.get('#/logout', logout);
 
-        this.get('#/catalog', movies.catalog);
+        this.get('#/catalog', movies.allMovies);
 
         this.get('#/my_movies', movies.myMovies);
         

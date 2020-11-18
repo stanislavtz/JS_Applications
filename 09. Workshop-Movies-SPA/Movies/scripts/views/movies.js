@@ -1,7 +1,7 @@
 import { getAllMovies, getMoviesByOwner, getMovieById, createMovie, buyTicket as ticketBuy, updateMovie, deleteMovie as movieDelete } from '../data.js';
 import { showError, showInfo } from '../notification.js';
 
-export async function catalog() {
+export async function allMovies() {
     const token = localStorage.getItem("userToken");
     if (!token) {
         return;
