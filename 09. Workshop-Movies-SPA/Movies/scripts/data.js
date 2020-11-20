@@ -60,16 +60,23 @@ export async function buyTicket(movie) {
 
 // User data manipulation
 // register user
-export async function registerFn(username, password) {
-    return await api.register(username, password);
-}
+export const registerFn = api.register.bind(api);
 
 // login user
-export async function loginFn(username, password) {
-    return api.login(username, password);
-}
+export const loginFn = api.login.bind(api);
 
 //logout user
-export async function logoutFn() {
-    return await api.logout()
-}
+export const logoutFn = api.logout.bind(api);
+
+
+// export async function registerFn(username, password) {
+//     return await api.register(username, password);
+// }
+
+// export async function loginFn(username, password) {
+//     return api.login(username, password);
+// }
+
+// export async function logoutFn() {
+//     return await api.logout()
+// }
