@@ -28,8 +28,8 @@ function loadProject() {
         this.get('#/logout', logout);
 
         this.get('#/catalog', movies.allMovies);
-
         this.get('#/my_movies', movies.myMovies);
+        this.get('#/details/:id', movies.details);
         
         this.get('#/create', movies.create);
         this.post('#/create', (ctx) => { movies.createPost.call(ctx); });
@@ -37,9 +37,9 @@ function loadProject() {
         this.get('#/edit/:id', movies.edit); 
         this.post('#/edit/:id', (ctx) => { movies.editPost.call(ctx); });
 
-        this.get('#/details/:id', movies.details);
-        this.get('#/buy/:id', movies.buyTicket);
-        this.get('#/delete/:id', movies.deleteMovie);
+        this.get('#/buy/:id', movies.buy);
+        
+        this.get('#/delete/:id', movies.del);
     });
 
     app.run();

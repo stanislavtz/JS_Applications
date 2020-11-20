@@ -5,9 +5,6 @@ const APP_ID = "674F6B95-0028-88D7-FF82-CF04AE5A2900";
 const API_KEY = "7B768AB1-8E6C-40B1-9AB3-AA4BB2743623";
 
 const endPoints = {
-    REGISTER: 'users/register',
-    LOGIN: 'users/login',
-    LOGOUT: 'users/logout',
     MOVIES: 'data/movies_catalog'
 }
 

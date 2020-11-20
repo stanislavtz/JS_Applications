@@ -14,8 +14,6 @@ export default class API {
                 endRequest();
             }
         };
-
-        // this.endPoints = endPoints;
     }
 
     host(endpoint) {

@@ -1,8 +1,9 @@
-import { getAllMovies, getMoviesByOwner, getMovieById, createMovie, buyTicket as ticketBuy, updateMovie, deleteMovie as movieDelete } from '../data.js';
 import { showError, showInfo } from '../notification.js';
+import * as moviesData from '../data.js';
 
 export async function allMovies() {
     const token = localStorage.getItem("userToken");
+
     if (!token) {
         return;
     }
@@ -16,9 +17,9 @@ export async function allMovies() {
 
     const search = this.params.search || '';
 
-    const movies = (await getAllMovies(search)).sort((a, b) => b.tickets - a.tickets);
-    this.app.userData.movies = movies;
+    const movies = (await moviesData.getAllMovies(search)).sort((a, b) => b.tickets - a.tickets);
 
+    this.app.userData.movies = movies;
 
     const obj = {
         origin: encodeURIComponent('#/catalog'),
@@ -32,6 +33,7 @@ export async function allMovies() {
 
 export async function myMovies() {
     const token = localStorage.getItem("userToken");
+    
     if (!token) {
         return;
     }
@@ -46,7 +48,8 @@ export async function myMovies() {
     }
 
     const userId = localStorage.getItem('userId');
-    const myMovies = (await getMoviesByOwner(userId)).sort((a, b) => b.tickets - a.tickets);
+
+    const myMovies = (await moviesData.getMoviesByOwner(userId)).sort((a, b) => b.tickets - a.tickets);
 
     this.app.userData.movies = myMovies;
 
@@ -62,6 +65,7 @@ export async function myMovies() {
 
 export async function create() {
     const token = localStorage.getItem("userToken");
+    
     if (!token) {
         return;
     }
@@ -96,7 +100,7 @@ export async function createPost() {
             tickets: Number(this.params.tickets)
         };
 
-        const result = await createMovie(movie);
+        const result = await moviesData.createMovie(movie);
 
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
@@ -105,7 +109,7 @@ export async function createPost() {
         showInfo('Movie created successfully.');
 
         this.redirect(`#/details/${result.objectId}`);
-        
+
         return result;
     } catch (error) {
         console.error(error);
@@ -115,6 +119,7 @@ export async function createPost() {
 
 export async function details() {
     const token = localStorage.getItem("userToken");
+    
     if (!token) {
         return;
     }
@@ -123,13 +128,12 @@ export async function details() {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
         movie: await this.load('./templates/movies/movie.hbs')
-
     }
 
-    const movie = (await getMovieById(this.params.id));
+    const movie = (await moviesData.getMovieById(this.params.id));
 
     const context = Object.assign(movie, this.app.userData);
-    
+
     context.origin = encodeURIComponent(`#/details/${this.params.id}`);
 
     this.partial("./templates/movies/details.hbs", context);
@@ -137,6 +141,7 @@ export async function details() {
 
 export async function edit() {
     const token = localStorage.getItem("userToken");
+    
     if (!token) {
         return;
     }
@@ -148,7 +153,7 @@ export async function edit() {
 
     localStorage.setItem('movieId', this.params.id);
 
-    const movie = await getMovieById(this.params.id);
+    const movie = await moviesData.getMovieById(this.params.id);
 
     const context = Object.assign(movie, this.app.userData)
 
@@ -180,7 +185,7 @@ export async function editPost() {
         const movieId = localStorage.getItem('movieId');
         localStorage.removeItem('movieId');
 
-        const result = await updateMovie(movieId, movie);
+        const result = await moviesData.updateMovie(movieId, movie);
 
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
@@ -197,11 +202,14 @@ export async function editPost() {
     }
 }
 
-export async function buyTicket() {
+export async function buy() {
     try {
-        const movie = (await getAllMovies()).find(m => m.objectId === this.params.id);
+        const movie = this.app.userData.movies.find(m => m.objectId === this.params.id);
 
-        const result = await ticketBuy(movie);
+        const result = await moviesData.buyTicket(movie);
+        
+        Promise.all([movie, result]);
+
         if (result.hasOwnProperty('errorData')) {
             this.redirect('#/catalog');
             throw new Error(result.message);
@@ -216,27 +224,24 @@ export async function buyTicket() {
     }
 }
 
-export async function deleteMovie() {
+export async function del() {
     const confirmDel = confirm("Are you sure you want to delete this movie?");
-    if(!confirmDel) {
+
+    if (!confirmDel) {
         return this.redirect('#/my_movies');
     }
 
     try {
-        const result = await movieDelete(this.params.id);
+        const result = await moviesData.deleteMovie(this.params.id);
 
-        if(result.hasOwnProperty('errorData')) {
+        if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
         }
-        
+
         showInfo('Movie removed successfully!');
 
         this.redirect('#/my_movies');
     } catch (error) {
         showError(error.message);
     }
-}
-
-export async function filteredMovies() {
-    console.log(this);
 }
