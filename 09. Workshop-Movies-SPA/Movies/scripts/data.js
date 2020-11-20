@@ -1,4 +1,5 @@
-import { beginRequest, endRequest } from './notification.js'
+import { beginRequest, endRequest } from './notification.js';
+import API from './api.js';
 
 const APP_ID = "674F6B95-0028-88D7-FF82-CF04AE5A2900";
 const API_KEY = "7B768AB1-8E6C-40B1-9AB3-AA4BB2743623";
@@ -7,12 +8,15 @@ function host(endpoint) {
     return `https://api.backendless.com/${APP_ID}/${API_KEY}/${endpoint}`;
 }
 
+
 const endPoints = {
     REGISTER: 'users/register',
     LOGIN: 'users/login',
     LOGOUT: 'users/logout',
     MOVIES: 'data/movies_catalog'
 }
+
+const api = new API(APP_ID, API_KEY, beginRequest, endRequest, endPoints)
 
 // Movies data manipulation
 // get all movies
@@ -207,6 +211,7 @@ export async function loginFn(username, password) {
 
 //logout user
 export async function logoutFn() {
+    return await api.logout()
     beginRequest();
 
     const token = localStorage.getItem("userToken");

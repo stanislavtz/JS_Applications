@@ -1,32 +1,25 @@
 export default class API {
-    constructor(appId, appKey, beginRequest, endRequest, endPoints) {
+    constructor(appId, apiKey, beginRequest, endRequest, endPoints) {
         this.appId = appId;
-        this.appKey = appKey;
+        this.apiKey = apiKey;
+
         this.beginRequest = () => {
             if (beginRequest) {
                 beginRequest();
             }
         };
-        this.endRequest = endRequest;
-        this.endPoints = Object.assign({
-            REGISTER: 'users/register',
-            LOGIN: 'users/login',
-            LOGOUT: 'users/logout',
-        }, endPoints);
-    }
 
-    set endRequest() {
-        return this._endRequest;
-    };
+        this.endRequest = () => {
+            if (endRequest) {
+                endRequest();
+            }
+        };
 
-    get endRequest(value) {
-        if (value) {
-            this._endRequest = value;
-        }
+        this.endPoints = endPoints;
     }
 
     host(endpoint) {
-        return `https://api.backendless.com/${this.appId}/${this.appKey}/${endpoint}`;
+        return `https://api.backendless.com/${this.appId}/${this.apiKey}/${endpoint}`;
     }
 
     getOptions(headers) {
@@ -37,7 +30,7 @@ export default class API {
         }
 
         if (token) {
-            options.headers = Object.assign(options.headers, { "user-token": token })
+            Object.assign(options.headers, { "user-token": token })
         }
 
         return options;
@@ -47,7 +40,7 @@ export default class API {
         const options = this.getOptions();
 
         this.beginRequest();
-        const result = (await fetch(this.host(endpoint), options)).json();
+        const result = await fetch(this.host(endpoint), options);
         this.endRequest();
 
         return result;
@@ -89,7 +82,7 @@ export default class API {
     }
 
     // register user
-    async registerFn(username, password) {
+    async register(username, password) {
         const result = this.post(this.endPoints.REGISTER, {
             name: username,
             password
@@ -99,7 +92,7 @@ export default class API {
     }
 
     // login user
-    async loginFn(username, password) {
+    async login(username, password) {
         const result = this.post(this.endPoints.LOGIN, {
             login: username,
             password
@@ -113,7 +106,7 @@ export default class API {
     }
 
     //logout user
-    async logoutFn() {
+    async logout() {
         const result = this.get(this.endPoints.LOGOUT);
         localStorage.removeItem('userToken');
 
