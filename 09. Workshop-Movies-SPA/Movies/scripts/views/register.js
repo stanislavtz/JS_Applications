@@ -1,5 +1,4 @@
-import { registerFn } from '../data.js';
-import { loginFn } from '../data.js';
+import { registerFn, loginFn } from '../data.js';
 import { showError, showInfo } from '../notification.js';
 
 export default async function () {

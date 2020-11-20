@@ -1,5 +1,5 @@
 export default class API {
-    constructor(appId, apiKey, beginRequest, endRequest, endPoints) {
+    constructor(appId, apiKey, beginRequest, endRequest) {
         this.appId = appId;
         this.apiKey = apiKey;
 
@@ -15,7 +15,7 @@ export default class API {
             }
         };
 
-        this.endPoints = endPoints;
+        // this.endPoints = endPoints;
     }
 
     host(endpoint) {
@@ -83,7 +83,7 @@ export default class API {
 
     // register user
     async register(username, password) {
-        const result = await this.post(this.endPoints.REGISTER, {
+        const result = await this.post('users/register', {
             name: username,
             password
         });
@@ -93,7 +93,7 @@ export default class API {
 
     // login user
     async login(username, password) {
-        const result = await this.post(this.endPoints.LOGIN, {
+        const result = await this.post('users/login', {
             login: username,
             password
         });
@@ -107,7 +107,7 @@ export default class API {
 
     //logout user
     async logout() {
-        const result = await this.get(this.endPoints.LOGOUT);
+        const result = await this.get('users/logout');
         localStorage.removeItem('userId');
         localStorage.removeItem('username');
         localStorage.removeItem('userToken');
