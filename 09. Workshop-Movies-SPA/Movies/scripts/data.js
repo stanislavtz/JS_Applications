@@ -8,7 +8,18 @@ const endPoints = {
     MOVIES: 'data/movies_catalog'
 }
 
-const api = new API(APP_ID, API_KEY, beginRequest, endRequest)
+const api = new API(APP_ID, API_KEY, beginRequest, endRequest);
+
+// User data manipulation
+// register user
+export const registerFn = api.register.bind(api);
+
+// login user
+export const loginFn = api.login.bind(api);
+
+//logout user
+export const logoutFn = api.logout.bind(api);
+
 
 // Movies data manipulation
 // get all movies
@@ -25,7 +36,7 @@ export async function getMovieById(id) {
     return (await api.get(endPoints.MOVIES + `/${id}`)).json();
 }
 
-// get all movies by ownerID
+// get movies by ownerID
 export async function getMoviesByOwner(ownerId) {
     return (await api.get(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`)).json();
 }
@@ -57,26 +68,3 @@ export async function buyTicket(movie) {
 
     return updateMovie(movieId, { tickets });
 }
-
-// User data manipulation
-// register user
-export const registerFn = api.register.bind(api);
-
-// login user
-export const loginFn = api.login.bind(api);
-
-//logout user
-export const logoutFn = api.logout.bind(api);
-
-
-// export async function registerFn(username, password) {
-//     return await api.register(username, password);
-// }
-
-// export async function loginFn(username, password) {
-//     return api.login(username, password);
-// }
-
-// export async function logoutFn() {
-//     return await api.logout()
-// }

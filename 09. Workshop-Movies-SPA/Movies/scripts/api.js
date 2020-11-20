@@ -106,6 +106,7 @@ export default class API {
     //logout user
     async logout() {
         const result = await this.get('users/logout');
+        
         localStorage.removeItem('userId');
         localStorage.removeItem('username');
         localStorage.removeItem('userToken');
