@@ -163,66 +163,18 @@ export async function buyTicket(movie) {
     return updateMovie(movieId, { tickets });
 }
 
-
 // User data manipulation
 // register user
 export async function registerFn(username, password) {
-    beginRequest();
-
-    const result = (await fetch(host(endPoints.REGISTER), {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            name: username,
-            password
-        })
-    })).json();
-
-    endRequest();
-
-    return result;
+    return await api.register(username, password);
 }
 
 // login user
 export async function loginFn(username, password) {
-    beginRequest();
-
-    const result = await (await fetch(host(endPoints.LOGIN), {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            login: username,
-            password
-        })
-    })).json();
-
-    localStorage.setItem('username', result.name);
-    localStorage.setItem('userId', result.objectId);
-    localStorage.setItem('userToken', result['user-token']);
-
-    endRequest();
-
-    return result;
+    return api.login(username, password);
 }
 
 //logout user
 export async function logoutFn() {
     return await api.logout()
-    beginRequest();
-
-    const token = localStorage.getItem("userToken");
-
-    const result = await fetch(host(endPoints.LOGOUT, {
-        headers: {
-            "user-token": token
-        }
-    }));
-
-    endRequest();
-
-    return result;
 }

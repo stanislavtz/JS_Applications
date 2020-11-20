@@ -83,7 +83,7 @@ export default class API {
 
     // register user
     async register(username, password) {
-        const result = this.post(this.endPoints.REGISTER, {
+        const result = await this.post(this.endPoints.REGISTER, {
             name: username,
             password
         });
@@ -93,7 +93,7 @@ export default class API {
 
     // login user
     async login(username, password) {
-        const result = this.post(this.endPoints.LOGIN, {
+        const result = await this.post(this.endPoints.LOGIN, {
             login: username,
             password
         });
@@ -107,7 +107,9 @@ export default class API {
 
     //logout user
     async logout() {
-        const result = this.get(this.endPoints.LOGOUT);
+        const result = await this.get(this.endPoints.LOGOUT);
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
         localStorage.removeItem('userToken');
 
         return result;
