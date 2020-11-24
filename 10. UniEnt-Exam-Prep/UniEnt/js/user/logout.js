@@ -1,4 +1,5 @@
-import { logout } from '../../models/user.js'
+import { logout } from '../../models/user.js';
+import { showSuccess, showError } from '../notification.js';
 
 export default function() {
     try {
@@ -12,10 +13,12 @@ export default function() {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('userToken');
 
+        showSuccess('Logout successful.');
+
         this.redirect('#/home');
 
     } catch (error) {
         console.error(error.message);
-        alert(error.message);
+        showError(error.message);
     }
 }

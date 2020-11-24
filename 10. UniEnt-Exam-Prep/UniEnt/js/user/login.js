@@ -1,4 +1,5 @@
-import { login } from '../../models/user.js'
+import { login } from '../../models/user.js';
+import { showSuccess, showError } from '../notification.js';
 
 export default async function () {
     this.partials = {
@@ -22,12 +23,12 @@ export async function loginPost() {
         sessionStorage.setItem('username', username);
         sessionStorage.setItem('userId', result.user.uid);
 
-       console.log('Login successful.');
-        
+        showSuccess('Login successful.');
+
         this.redirect('#/home');
 
     } catch (error) {
         console.error(error.message);
-        alert(error.message);
+        showError(error.message);
     }
 }

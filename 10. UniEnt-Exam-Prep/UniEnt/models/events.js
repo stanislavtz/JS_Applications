@@ -1,15 +1,32 @@
+import { beginRequest, endRequest } from '../js/notification.js';
+
 export function create(data) {
-    return firebase.firestore().collection('events').add(data)
+    beginRequest();
+    const result = firebase.firestore().collection('events').add(data);
+    endRequest();
+    return result;
 }
 export async function getAll() {
-    return firebase.firestore().collection('events').get()
+    beginRequest();
+    const result =  firebase.firestore().collection('events').get();
+    endRequest();
+    return result;
 }
 export function get(id) {
-    return firebase.firestore().collection('events').doc(id).get()
+    beginRequest();
+    const result =  firebase.firestore().collection('events').doc(id).get();
+    endRequest();
+    return result;
 }
 export function close(id) {
-    return firebase.firestore().collection('events').doc(id).delete()
+    beginRequest();
+    const result =  firebase.firestore().collection('events').doc(id).delete();
+    endRequest();
+    return result;
 }
 export function update(id, data) {
-    return firebase.firestore().collection('events').doc(id).update(data)
+    beginRequest();
+    const result =  firebase.firestore().collection('events').doc(id).update(data);
+    endRequest();
+    return result;
 }

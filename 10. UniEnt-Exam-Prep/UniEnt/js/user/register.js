@@ -1,4 +1,5 @@
 import { registerUser } from '../..//models/user.js';
+import { showSuccess, showError } from '../notification.js';
 
 export default async function () {
     this.partials = {
@@ -31,13 +32,12 @@ export async function registerPost() {
             throw new Error(result.message);
         }
 
-        console.log('User registration successful.');
-
+        showSuccess('User registration successful.');
         
         this.redirect('#/home');
         
     } catch (error) {
         console.error(error.message);
-        alert(error.message);
+        showError(error.message);
     }
 }

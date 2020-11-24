@@ -15,8 +15,8 @@ import closeEvent from './js/events/closeEvent.js';
 window.addEventListener('load', loadApplication);
 
 function loadApplication() {
-    const app = Sammy("body", function () {
-        this.use("Handlebars", "hbs");
+    const app = Sammy('#main', function () {
+        this.use('Handlebars', 'hbs');
 
         this.userData = {
             username: () => sessionStorage.getItem('username'),
