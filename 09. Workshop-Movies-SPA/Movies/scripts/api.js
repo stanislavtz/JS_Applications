@@ -21,7 +21,7 @@ export default class API {
     }
 
     getOptions(headers) {
-        const token = localStorage.getItem('userToken');
+        const token = sessionStorage.getItem('userToken');
 
         const options = {
             headers: headers || {}
@@ -40,8 +40,12 @@ export default class API {
         this.beginRequest();
         const result = await fetch(this.host(endpoint), options);
         this.endRequest();
-
-        return result;
+        
+        try {
+            return await result.json();
+        } catch (error) {
+            return result;
+        }
     }
 
     async post(endpoint, body) {
@@ -96,9 +100,9 @@ export default class API {
             password
         });
 
-        localStorage.setItem('username', result.name);
-        localStorage.setItem('userId', result.objectId);
-        localStorage.setItem('userToken', result['user-token']);
+        sessionStorage.setItem('username', result.name);
+        sessionStorage.setItem('userId', result.objectId);
+        sessionStorage.setItem('userToken', result['user-token']);
 
         return result;
     }
@@ -107,9 +111,10 @@ export default class API {
     async logout() {
         const result = await this.get('users/logout');
         
-        localStorage.removeItem('userId');
-        localStorage.removeItem('username');
-        localStorage.removeItem('userToken');
+        sessionStorage.removeItem('userId');
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('userToken');
+        sessionStorage.clear()
 
         return result;
     }

@@ -16,15 +16,15 @@ export async function loginPost() {
         const password = this.params.password;
 
         const result = await loginFn(username, password); 
+
         if(result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
         }
 
-        this.app.userData.username = result.name;
-        this.app.userData.userId = result.objectId;
-
+        showInfo('Login successful.');
+        
         this.redirect('#/home');
-        showInfo('Login successful.')
+
         return result;
 
     } catch (error) {

@@ -2,7 +2,7 @@ import { showError, showInfo } from '../notification.js';
 import * as moviesData from '../data.js';
 
 export async function allMovies() {
-    const token = localStorage.getItem("userToken");
+    const token = sessionStorage.getItem("userToken");
 
     if (!token) {
         return;
@@ -32,7 +32,7 @@ export async function allMovies() {
 }
 
 export async function myMovies() {
-    const token = localStorage.getItem("userToken");
+    const token = sessionStorage.getItem("userToken");
     
     if (!token) {
         return;
@@ -47,7 +47,7 @@ export async function myMovies() {
 
     }
 
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
 
     const myMovies = (await moviesData.getMoviesByOwner(userId)).sort((a, b) => b.tickets - a.tickets);
 
@@ -64,7 +64,7 @@ export async function myMovies() {
 }
 
 export async function create() {
-    const token = localStorage.getItem("userToken");
+    const token = sessionStorage.getItem("userToken");
     
     if (!token) {
         return;
@@ -118,7 +118,7 @@ export async function createPost() {
 }
 
 export async function details() {
-    const token = localStorage.getItem("userToken");
+    const token = sessionStorage.getItem("userToken");
     
     if (!token) {
         return;
@@ -140,7 +140,7 @@ export async function details() {
 }
 
 export async function edit() {
-    const token = localStorage.getItem("userToken");
+    const token = sessionStorage.getItem("userToken");
     
     if (!token) {
         return;
@@ -151,7 +151,7 @@ export async function edit() {
         footer: await this.load('./templates/common/footer.hbs'),
     }
 
-    localStorage.setItem('movieId', this.params.id);
+    sessionStorage.setItem('movieId', this.params.id);
 
     const movie = await moviesData.getMovieById(this.params.id);
 
@@ -182,8 +182,8 @@ export async function editPost() {
             tickets: Number(this.params.tickets)
         };
 
-        const movieId = localStorage.getItem('movieId');
-        localStorage.removeItem('movieId');
+        const movieId = sessionStorage.getItem('movieId');
+        sessionStorage.removeItem('movieId');
 
         const result = await moviesData.updateMovie(movieId, movie);
 

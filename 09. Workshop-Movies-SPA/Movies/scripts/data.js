@@ -25,20 +25,20 @@ export const logoutFn = api.logout.bind(api);
 // get all movies
 export async function getAllMovies(search) {
     if(!search) {
-        return (await api.get(endPoints.MOVIES)).json();
+        return (await api.get(endPoints.MOVIES));
     } else {
-        return (await api.get(endPoints.MOVIES + `?where=genres%20LIKE%20%27%25${search}%25%27`)).json();
+        return (await api.get(endPoints.MOVIES + `?where=genres%20LIKE%20%27%25${search}%25%27`));
     }
 }
 
 // get movie by ID
 export async function getMovieById(id) {
-    return (await api.get(endPoints.MOVIES + `/${id}`)).json();
+    return (await api.get(endPoints.MOVIES + `/${id}`));
 }
 
 // get movies by ownerID
 export async function getMoviesByOwner(ownerId) {
-    return (await api.get(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`)).json();
+    return (await api.get(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`));
 }
 
 // create movie

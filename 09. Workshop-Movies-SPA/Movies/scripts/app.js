@@ -11,9 +11,9 @@ function loadProject() {
         this.use("Handlebars", "hbs");
 
         this.userData = {
-            username: localStorage.getItem('username'),
-            userId: localStorage.getItem('userId')
-        };
+            username: () => sessionStorage.getItem('username'),
+            userId: () => sessionStorage.getItem('userId')
+        } 
 
         this.get('index.html', home);
         this.get('#/home', home);
