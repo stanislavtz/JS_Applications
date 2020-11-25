@@ -27,18 +27,18 @@ export async function getAllMovies(search) {
     if(!search) {
         return (await api.get(endPoints.MOVIES));
     } else {
-        return (await api.get(endPoints.MOVIES + `?where=genres%20LIKE%20%27%25${search}%25%27`));
+        return (await api.get(`${endPoints.MOVIES}?where=genres%20LIKE%20%27%25${search}%25%27`));
     }
 }
 
 // get movie by ID
 export async function getMovieById(id) {
-    return (await api.get(endPoints.MOVIES + `/${id}`));
+    return (await api.get(`${endPoints.MOVIES}/${id}`));
 }
 
 // get movies by ownerID
 export async function getMoviesByOwner(ownerId) {
-    return (await api.get(endPoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`));
+    return (await api.get(`${endPoints.MOVIES}?where=ownerId%3D%27${ownerId}%27`));
 }
 
 // create movie
@@ -48,12 +48,12 @@ export async function createMovie(movie) {
 
 // edit movie
 export async function updateMovie(id, newProps) {
-   return await api.put(endPoints.MOVIES + `/${id}`, newProps);
+   return await api.put(`${endPoints.MOVIES}/${id}`, newProps);
 }
 
 // delete movie
 export async function deleteMovie(id) {
-    return await api.delete(endPoints.MOVIES + `/${id}`);
+    return await api.delete(`${endPoints.MOVIES}/${id}`);
 }
 
 // buy tiket
