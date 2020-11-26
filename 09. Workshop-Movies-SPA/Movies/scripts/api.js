@@ -111,10 +111,10 @@ export default class API {
     async logout() {
         const result = await this.get('users/logout');
         
-        sessionStorage.removeItem('userId');
-        sessionStorage.removeItem('username');
-        sessionStorage.removeItem('userToken');
-        sessionStorage.clear()
+        // sessionStorage.removeItem('userId');
+        // sessionStorage.removeItem('username');
+        // sessionStorage.removeItem('userToken');
+        sessionStorage.clear();
 
         return result;
     }

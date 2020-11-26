@@ -151,8 +151,6 @@ export async function edit() {
         footer: await this.load('./templates/common/footer.hbs'),
     }
 
-    sessionStorage.setItem('movieId', this.params.id);
-
     const movie = await moviesData.getMovieById(this.params.id);
 
     const context = Object.assign(movie, this.app.userData)
@@ -182,8 +180,7 @@ export async function editPost() {
             tickets: Number(this.params.tickets)
         };
 
-        const movieId = sessionStorage.getItem('movieId');
-        sessionStorage.removeItem('movieId');
+        const movieId = this.params.id;
 
         const result = await moviesData.updateMovie(movieId, movie);
 
@@ -204,12 +201,10 @@ export async function editPost() {
 
 export async function buy() {
     try {
-        const movie = this.app.userData.movies.find(m => m.objectId === this.params.id);
+        const movie = await moviesData.getMovieById(this.params.id)
 
         const result = await moviesData.buyTicket(movie);
         
-        Promise.all([movie, result]);
-
         if (result.hasOwnProperty('errorData')) {
             this.redirect('#/catalog');
             throw new Error(result.message);
