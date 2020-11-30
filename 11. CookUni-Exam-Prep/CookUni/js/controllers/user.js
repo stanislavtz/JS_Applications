@@ -1,5 +1,4 @@
 import * as notes from '../notifications.js';
-import { beginReuest, endRequest } from '../notifications.js';
 import { registerFn, loginFn, logoutFn } from '../data.js';
 
 export async function registerPage() {
