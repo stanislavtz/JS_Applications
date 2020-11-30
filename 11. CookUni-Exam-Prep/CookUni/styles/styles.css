@@ -260,6 +260,8 @@ form textarea {
 }
 
 #successBox, #loadingBox, #errorBox {
+  top: 72px;
+  position: fixed;
   display: none;
   text-align: center;
 }
