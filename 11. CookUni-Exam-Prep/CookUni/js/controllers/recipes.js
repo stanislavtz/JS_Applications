@@ -46,7 +46,7 @@ export async function detailsPage() {
         footer: await this.load('./templates/common/footer.hbs'),
     }
 
-    const recipe = await data.getReipeById(this.params.id);
+    const recipe = await data.getRecipeById(this.params.id);
 
     this.app.userData.recipe = recipe;
 
@@ -57,7 +57,6 @@ export async function detailsPage() {
     }
 
     await this.partial('./templates/recipe/details.hbs', this.app.userData);
-
 }
 
 export async function editPage() {
@@ -66,7 +65,8 @@ export async function editPage() {
         footer: await this.load('./templates/common/footer.hbs'),
     }
 
-    const recipe = await data.getReipeById(this.params.id);
+    const recipe = await data.getRecipeById(this.params.id);
+
     recipe.ingredients = recipe.ingredients.join(', ')
 
     this.app.userData.recipe = recipe;
@@ -77,7 +77,7 @@ export async function editPage() {
 export async function editPost() {
     try {
         const { meal, ingredients, prepMethod, description, foodImageURL, category, id } = this.params;
-    
+
         const recipe = {
             id,
             meal,
@@ -88,7 +88,7 @@ export async function editPost() {
             category,
             categoryImageURL: this.app.userData.categories[category]
         }
-    
+
         const result = await data.editRecipe(recipe);
 
         if (result.hasOwnProperty('errorData')) {
@@ -96,8 +96,44 @@ export async function editPost() {
         }
 
         showSuccess('Recipe was updated successfully!');
-    
-        this.redirect('#/home');        
+
+        this.redirect('#/home');
+    } catch (error) {
+        console.error(error.message);
+        showError(error.message);
+    }
+}
+
+export async function archive() {
+    try {
+        const result = await data.archiveRecipe(this.params.id);
+
+        if (result.hasOwnProperty('errorData')) {
+            throw new Error(result.message);
+        }
+
+        showSuccess('Your recipe was archived.');
+
+        this.redirect('#/home');
+    } catch (error) {
+        console.error(error.message);
+        showError(error.message)
+    }
+}
+
+export async function like() {
+    try {
+        const recipe = await data.getRecipeById(this.params.id);
+
+        const result = await data.likeRecipe(recipe);
+
+        if (result.hasOwnProperty('errorData')) {
+            throw new Error(result.message);
+        }
+
+        showSuccess('You liked that recipe.');
+
+        this.redirect('#/home');
     } catch (error) {
         console.error(error.message);
         showError(error.message);

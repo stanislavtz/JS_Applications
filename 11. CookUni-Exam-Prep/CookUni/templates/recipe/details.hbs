@@ -17,7 +17,7 @@
                 <a class="btn btn-danger" href="#/archive/{{recipe.objectId}}">Archive</a>
                 <a class="btn btn-info" href="#/edit/{{recipe.objectId}}">Edit</a>
                 {{else}}
-                <a class="btn btn-success" href="#/like"> {{recipe.likes}} likes</a>
+                <a class="btn btn-success" href="#/like/{{recipe.objectId}}">{{recipe.likes}} likes</a>
                 {{/if}}
             </div>
         </div>

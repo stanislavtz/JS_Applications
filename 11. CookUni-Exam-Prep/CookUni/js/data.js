@@ -18,7 +18,7 @@ export async function getAllRecipes() {
     return api.get(endPoints.RECIPES);
 }
 
-export async function getReipeById(id) {
+export async function getRecipeById(id) {
     return await api.get(`${endPoints.RECIPES}/${id}`);
 }
 
@@ -27,7 +27,7 @@ export async function shareRecipe(recipe) {
 }
 
 export async function editRecipe(recipe) {
-    const id = recipe.id;
+    const id = recipe.objectId;
     return await api.put(`${endPoints.RECIPES}/${id}`, recipe);
 }
 

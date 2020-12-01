@@ -1,6 +1,6 @@
 import { home } from './controllers/home.js';
 import * as user from './controllers/user.js';
-import * as recipies from './controllers/recipes.js';
+import * as recipes from './controllers/recipes.js';
 
 window.addEventListener('load', loadApplication);
 
@@ -34,14 +34,17 @@ function loadApplication() {
 
         this.get('#/logout', user.logout);
 
-        this.get('#/share', recipies.sharePage);
-        this.post('#/share', (ctx) => { recipies.sharePost.call(ctx) });
+        this.get('#/share', recipes.sharePage);
+        this.post('#/share', (ctx) => { recipes.sharePost.call(ctx) });
 
-        this.get('#/details/:id', recipies.detailsPage);
+        this.get('#/details/:id', recipes.detailsPage);
 
-        this.get('#/edit/:id', recipies.editPage);
-        this.post('#/edit/:id', (ctx) => { recipies.editPost.call(ctx) });
+        this.get('#/edit/:id', recipes.editPage);
+        this.post('#/edit/:id', (ctx) => { recipes.editPost.call(ctx) });
 
+        this.get('#/archive/:id', recipes.archive);
+        
+        this.get('#/like/:id', recipes.like);
     });
 
     app.run();
