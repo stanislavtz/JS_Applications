@@ -16,10 +16,7 @@ export async function sharePost() {
         
         const recipe = {
             meal,
-            ingredients: ingredients.split(',').map(x => {
-                x.trim(); 
-                x.trim('"');
-            }),
+            ingredients: ingredients.split(',').map(x => x.trim()),
             prepMethod,
             description,
             foodImageURL,
@@ -33,7 +30,7 @@ export async function sharePost() {
             throw new Error(result.message)
         }
 
-        showSuccess('Recipe shared successfully!');
+        showSuccess('Recipe shared successfully!');
 
         this.redirect('#/home');
         

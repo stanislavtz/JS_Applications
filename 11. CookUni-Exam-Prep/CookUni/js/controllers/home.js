@@ -9,5 +9,6 @@ export async function home() {
 
     const meals =  await getAllRecipes();
     this.app.userData.meals = meals;
+    
     await this.partial('./templates/home.hbs', this.app.userData);
 }
