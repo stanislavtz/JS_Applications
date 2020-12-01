@@ -1,4 +1,4 @@
-import {getAllRecipes} from '../data.js';
+import { getAllRecipes } from '../data.js';
 
 export async function home() {
     this.partials = {
@@ -7,8 +7,8 @@ export async function home() {
         meal: await this.load('./templates/recipe/meal.hbs')
     }
 
-    const meals =  await getAllRecipes();
+    const meals = await getAllRecipes();
     this.app.userData.meals = meals;
-    
+
     await this.partial('./templates/home.hbs', this.app.userData);
 }

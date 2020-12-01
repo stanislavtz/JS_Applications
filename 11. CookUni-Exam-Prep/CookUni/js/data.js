@@ -27,7 +27,8 @@ export async function shareRecipe(recipe) {
 }
 
 export async function editRecipe(recipe) {
-    return await api.put(endPoints.RECIPES, recipe);
+    const id = recipe.id;
+    return await api.put(`${endPoints.RECIPES}/${id}`, recipe);
 }
 
 export async function archiveRecipe(id) {

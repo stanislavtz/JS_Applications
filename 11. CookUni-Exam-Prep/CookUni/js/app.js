@@ -1,7 +1,6 @@
 import { home } from './controllers/home.js';
 import * as user from './controllers/user.js';
 import * as recipies from './controllers/recipes.js';
-import { getAllRecipes } from './data.js';
 
 window.addEventListener('load', loadApplication);
 
@@ -18,10 +17,8 @@ function loadApplication() {
             "Lean meats and poultry, fish and alternatives": 'https://c8.alamy.com/comp/PXA12M/high-protein-food-for-body-builders-of-lean-steak-pork-patemilk-cheese-chicken-shrimps-eggs-beansnuts-with-dumbbell-weights-protein-sources-he-PXA12M.jpg'
         }
 
-
         this.userData = {
             names: () => sessionStorage.getItem('names'),
-            haveFood: true,
             categories
         }
 
@@ -39,6 +36,12 @@ function loadApplication() {
 
         this.get('#/share', recipies.sharePage);
         this.post('#/share', (ctx) => { recipies.sharePost.call(ctx) });
+
+        this.get('#/details/:id', recipies.detailsPage);
+
+        this.get('#/edit/:id', recipies.editPage);
+        this.post('#/edit/:id', (ctx) => { recipies.editPost.call(ctx) });
+
     });
 
     app.run();
