@@ -17,14 +17,15 @@ function loadApplication() {
         this.get('index.html', home);
 
         this.get('#/register', user.registerPage);
-        this.post('#/register', (ctx) => { user.registerPost.call(ctx)});
+        this.post('#/register', (ctx) => { user.registerPost.call(ctx) });
 
         this.get('#/login', user.loginPage);
-        this.post('#/login', (ctx) => {user.loginPost.call(ctx)});
+        this.post('#/login', (ctx) => { user.loginPost.call(ctx) });
 
         this.get('#/logout', user.logout);
 
         this.get('#/create', shoes.createPage);
+        this.post('#/create', (ctx) => { shoes.createPost.call(ctx) });
 
         this.get('#/details', shoes.detailsPage);
 

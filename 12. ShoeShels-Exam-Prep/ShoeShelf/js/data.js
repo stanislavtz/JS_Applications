@@ -21,9 +21,9 @@ export async function getShoesById(id) {
     return await api.get(`${endPoints.SHOES}/${id}`);
 }
 
-// export async function shareRecipe(recipe) {
-//     return await api.post(endPoints.SHOES, recipe);
-// }
+export async function createShoes(shoes) {
+    return await api.post(endPoints.SHOES, shoes);
+}
 
 // export async function editRecipe(recipe) {
 //     const id = recipe.objectId;

@@ -1,4 +1,4 @@
-
+import { createShoes } from '../data.js';
 
 export async function createPage() {
     this.partials = {
@@ -7,6 +7,31 @@ export async function createPage() {
     }
 
     await this.partial('./templates/shoes/create.hbs', this.app.userData);
+}
+
+export async function createPost() {
+    try {
+        const { name, price, shoesURL, description, brand } = this.params;
+
+        const shoes = {
+            name, 
+            price,
+            shoesURL, 
+            description, 
+            brand
+        }
+
+        const result = await createShoes(shoes);
+
+        if (result.hasOwnProperty('errorData')) {
+            throw new Error(result.message);
+        }
+
+        this.redirect('#/home');
+    } catch (error) {
+        console.error(error.message)
+    }
+
 }
 
 export async function detailsPage() {
