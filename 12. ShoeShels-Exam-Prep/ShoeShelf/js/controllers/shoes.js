@@ -18,7 +18,9 @@ export async function createPost() {
             price,
             shoesURL, 
             description, 
-            brand
+            brand,
+            creator: sessionStorage.getItem('userId'),
+            buyers: []
         }
 
         const result = await createShoes(shoes);

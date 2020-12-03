@@ -13,8 +13,8 @@
         </div>
     </div>
     {{else}}
-        {{#each shoes}}
         <div class="shoes">
+        {{#each shoes}}
             {{> pairShoes}}
             {{!-- <div class="shoe">
                 <img src="https://i1.t4s.cz/products/ar4149-001/nike-air-zoom-pegasus-36-gs-251390-ar4149-001.jpeg">
@@ -44,10 +44,10 @@
                 <h3>Asics Gel-Quantum</h3>
                 <a>Buy it for $140,00</a>
             </div> --}}
-        </div>
         {{else}}
         <h1>No shoes to display. Be the first to create a new offer...</h1>
         {{/each}}
+        </div>
     {{/unless}}
     {{!-- 
 
