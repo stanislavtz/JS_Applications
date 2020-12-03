@@ -17,21 +17,21 @@ export async function getAllShoes() {
     return api.get(endPoints.SHOES);
 }
 
-// export async function getRecipeById(id) {
-//     return await api.get(`${endPoints.RECIPES}/${id}`);
-// }
+export async function getShoesById(id) {
+    return await api.get(`${endPoints.SHOES}/${id}`);
+}
 
 // export async function shareRecipe(recipe) {
-//     return await api.post(endPoints.RECIPES, recipe);
+//     return await api.post(endPoints.SHOES, recipe);
 // }
 
 // export async function editRecipe(recipe) {
 //     const id = recipe.objectId;
-//     return await api.put(`${endPoints.RECIPES}/${id}`, recipe);
+//     return await api.put(`${endPoints.SHOES}/${id}`, recipe);
 // }
 
 // export async function archiveRecipe(id) {
-//     return await api.del(`${endPoints.RECIPES}/${id}`);
+//     return await api.del(`${endPoints.SHOES}/${id}`);
 // }
 
 // export async function likeRecipe(recipe) {

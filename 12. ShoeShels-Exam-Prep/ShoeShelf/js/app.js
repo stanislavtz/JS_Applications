@@ -1,5 +1,6 @@
 import { home } from './controllers/home.js';
 import * as user from './controllers/user.js';
+import * as shoes from './controllers/shoes.js';
 
 window.addEventListener('load', loadApplication);
 
@@ -23,7 +24,9 @@ function loadApplication() {
 
         this.get('#/logout', user.logout);
 
-        this.get('#/create', )
+        this.get('#/create', shoes.createPage);
+
+        this.get('#/details', shoes.detailsPage);
 
     });
 
