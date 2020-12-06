@@ -21,8 +21,6 @@ export async function loginPage() {
 export async function registerPost() {
     const { email, password, repeatPassword } = this.params;
 
-    console.log(this)
-
     if (!email) {
         document.querySelectorAll('input').forEach(p => p.value = '');
         return;
@@ -62,6 +60,12 @@ export async function loginPost() {
 }
 
 export async function logout() {
+    const token = sessionStorage.getItem('userToken');
+
+    if(!token) {
+        return;
+    }
+    
     const result = await logoutFn();
 
     if (result.hasOwnProperty('errorData')) {

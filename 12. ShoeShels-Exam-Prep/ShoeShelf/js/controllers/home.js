@@ -7,7 +7,7 @@ export async function home() {
         pairShoes: await this.load('./templates/shoes/pairShoes.hbs'),
     }
 
-    const shoes = await getAllShoes();
+    const shoes = (await getAllShoes()).sort((a, b) => b.buyers.length - a.buyers.length);
 
     if(shoes.hasOwnProperty('errorData')) {
         return;

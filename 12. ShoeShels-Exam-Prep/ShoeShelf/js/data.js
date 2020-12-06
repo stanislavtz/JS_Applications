@@ -25,17 +25,22 @@ export async function createShoes(shoes) {
     return await api.post(endPoints.SHOES, shoes);
 }
 
-// export async function editRecipe(recipe) {
-//     const id = recipe.objectId;
-//     return await api.put(`${endPoints.SHOES}/${id}`, recipe);
-// }
+export async function editShoes(shoes) {
+    const id = shoes.objectId;
+    return await api.put(`${endPoints.SHOES}/${id}`, shoes);
+}
 
-// export async function archiveRecipe(id) {
-//     return await api.del(`${endPoints.SHOES}/${id}`);
-// }
+export async function deleteOffer(id) {
+    return await api.del(`${endPoints.SHOES}/${id}`);
+}
 
-// export async function likeRecipe(recipe) {
-//     recipe.likes += 1;
+export async function buyShoes(shoes) {
+    const userEmail = sessionStorage.getItem('email');
+    if(shoes.buyers.includes(userEmail)) {
+        return;
+    }
+    
+    shoes.buyers.push(userEmail);
 
-//     return editRecipe(recipe);
-// }
+    return editShoes(shoes);
+}

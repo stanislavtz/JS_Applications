@@ -9,7 +9,7 @@ function loadApplication() {
         this.use('Handlebars', 'hbs');
 
         this.userData = {
-            email: () => sessionStorage.getItem('email') //|| 'stan@abv.bg'
+            email: () => sessionStorage.getItem('email'),
         }
 
         this.get('/', home);
@@ -27,8 +27,13 @@ function loadApplication() {
         this.get('#/create', shoes.createPage);
         this.post('#/create', (ctx) => { shoes.createPost.call(ctx) });
 
-        this.get('#/details', shoes.detailsPage);
+        this.get('#/details/:id', shoes.detailsPage);
 
+        this.get('#/edit/:id', shoes.editPage);
+        this.post('#/edit/:id', (ctx) => { shoes.editPost.call(ctx) });
+
+        this.get('#/delete/:id', shoes.delAction);
+        this.get('#/buy/:id', shoes.buyAction);
     });
 
     app.run();
