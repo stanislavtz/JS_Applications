@@ -1,0 +1,1 @@
+First run in terminal "npm install", because this app depending on sammy, handlebars and jquery!
