@@ -84,10 +84,14 @@ export default class API {
     }
 
     async register(email, password) {
-        await this.post('users/register', {
+        const result = await this.post('users/register', {
             email,
             password
         });
+
+        if(result.hasOwnProperty('errorData')) {
+            throw new Error(result.message);
+        }
 
         const loginResult = this.login(email, password);
 
