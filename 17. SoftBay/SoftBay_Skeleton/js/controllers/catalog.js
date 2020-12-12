@@ -1,9 +1,10 @@
 import * as data from '../data.js';
 import { showError, showSuccess } from '../notification.js';
 
-let prId;
 
 export async function dashboardPage() {
+    let num = 0;
+
     const token = sessionStorage.getItem('userToken');
 
     if (!token) {
@@ -17,13 +18,13 @@ export async function dashboardPage() {
     }
 
     const offers = await data.getAllData();
-    prId = offers.length;
 
     offers.forEach(offer => {
         offer.isOwner = offer.ownerId === sessionStorage.getItem('userId');
+        offer.num = ++num;
     });
 
-    this.app.userData.offers = offers.sort((a, b) => a.id - b.id);
+    this.app.userData.offers = offers;
 
     await this.partial('./templates/offers/dashboard.hbs', this.app.userData);
 }
@@ -113,7 +114,7 @@ export async function createPost() {
         }
 
         const offer = {
-            id: ++prId || 1,
+            id: 0,
             product,
             description,
             pictureUrl,
@@ -181,21 +182,9 @@ export async function deletePost() {
 }
 
 export async function buyAction() {
-   
+    const user = await data.getUserById(sessionStorage.getItem('userId'));
+    
+    user.purchases.push(this.params.id);
+
+    await data.upadeUser(user);
 }
-
-// export async function likeAction() {
-//     try {
-//         const movie = await data.getDataById(this.params.id);
-
-//         await data.likeAction(movie);
-
-//         showSuccess('Liked successfully');
-
-//         this.redirect(`#/details/${this.params.id}`);
-
-//     } catch (error) {
-//         console.error(error.message);
-//         showError(error.message);
-//     }
-// }

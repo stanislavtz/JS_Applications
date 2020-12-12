@@ -37,6 +37,8 @@ function loadApplication() {
         this.get('#/delete/:id', offer.deletePage);
         this.post('#/delete/:id', (ctx) => { offer.deletePost.call(ctx) });
 
+        this.get('#/buy/:id', offer.buyAction)
+
         this.get('#/profile', user.profilePage);
     });
 

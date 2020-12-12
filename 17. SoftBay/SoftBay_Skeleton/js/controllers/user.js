@@ -25,9 +25,9 @@ export async function profilePage() {
     }
 
     const email = sessionStorage.getItem('email');
-    const purchases = 0;
+    const purchasesCount = (await user.getUserById(sessionStorage.getItem('userId'))).purchases.length;
 
-    await this.partial('./templates/user/profile.hbs', {email, purchases});
+    await this.partial('./templates/user/profile.hbs', {email, purchasesCount});
 }
 
 export async function registerPost() {

@@ -36,6 +36,15 @@ export async function deleteData(id) {
     return await api.del(`${endPoints.OFFERS}/${id}`);
 }
 
+export async function getUserById(id) {
+    return await api.get(`${endPoints.USERS}/${id}`);
+}
+
+export async function upadeUser(user) {
+    const id = sessionStorage.getItem('userId')
+    return await api.put(`${endPoints.USERS}/${id}`, user);
+}
+
 // export async function likeAction(offer) {
 //     const userEmail = sessionStorage.getItem('email');
 
