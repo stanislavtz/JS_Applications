@@ -44,15 +44,3 @@ export async function upadeUser(user) {
     const id = sessionStorage.getItem('userId')
     return await api.put(`${endPoints.USERS}/${id}`, user);
 }
-
-// export async function likeAction(offer) {
-//     const userEmail = sessionStorage.getItem('email');
-
-//     if(offer.likers.includes(userEmail)) {
-//         return;
-//     }
-    
-//     offer.likers.push(userEmail);
-
-//     return editData(offer);
-// }
