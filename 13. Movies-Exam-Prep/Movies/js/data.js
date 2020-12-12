@@ -13,28 +13,28 @@ export const registerFn = api.register.bind(api);
 export const loginFn = api.login.bind(api);
 export const logoutFn = api.logout.bind(api);
 
-export async function getMovies() {
+export async function getAllData() {
     return api.get(endPoints.MOVIES);
 }
 
-export async function getMovieById(id) {
+export async function getDataById(id) {
     return await api.get(`${endPoints.MOVIES}/${id}`);
 }
 
-export async function createMovie(movie) {
+export async function createData(movie) {
     return await api.post(endPoints.MOVIES, movie);
 }
 
-export async function editMovie(movie) {
+export async function editData(movie) {
     const id = movie.objectId;
     return await api.put(`${endPoints.MOVIES}/${id}`, movie);
 }
 
-export async function deleteMovie(id) {
+export async function deleteData(id) {
     return await api.del(`${endPoints.MOVIES}/${id}`);
 }
 
-export async function likeMovie(movie) {
+export async function likeAction(movie) {
     const userEmail = sessionStorage.getItem('email');
 
     if(movie.likers.includes(userEmail)) {
@@ -43,5 +43,5 @@ export async function likeMovie(movie) {
     
     movie.likers.push(userEmail);
 
-    return editMovie(movie);
+    return editData(movie);
 }

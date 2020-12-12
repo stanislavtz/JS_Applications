@@ -28,7 +28,7 @@ export async function detailsPage() {
         footer: await this.load('./templates/common/footer.hbs')
     }
 
-    const movie = await data.getMovieById(this.params.id);
+    const movie = await data.getDataById(this.params.id);
     const isOwner = movie.ownerId === sessionStorage.getItem('userId');
 
     this.app.userData.movie = movie;
@@ -55,7 +55,7 @@ export async function editPage() {
         footer: await this.load('./templates/common/footer.hbs')
     }
 
-    const pair = await data.getMovieById(this.params.id);
+    const pair = await data.getDataById(this.params.id);
 
     this.app.userData.pair = pair;
 
@@ -78,7 +78,7 @@ export async function createPost() {
             likers: []
         }
 
-        const result = await data.createMovie(movie);
+        const result = await data.createData(movie);
 
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
@@ -104,7 +104,7 @@ export async function editPost() {
             description,
         }
 
-        const result = await data.editMovie(movie);
+        const result = await data.editData(movie);
 
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
@@ -122,7 +122,7 @@ export async function editPost() {
 
 export async function delAction() {
     try {
-        const result = await data.deleteMovie(this.params.id);
+        const result = await data.deleteData(this.params.id);
 
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
@@ -139,9 +139,9 @@ export async function delAction() {
 
 export async function likeAction() {
     try {
-        const movie = await data.getMovieById(this.params.id);
+        const movie = await data.getDataById(this.params.id);
     
-        await data.likeMovie(movie);
+        await data.likeAction(movie);
     
         showSuccess('Liked successfully');
 

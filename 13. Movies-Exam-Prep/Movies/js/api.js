@@ -84,14 +84,14 @@ export default class API {
     }
 
     async register(email, password) {
-        await this.post('users/register', {
+        const result = await this.post('users/register', {
             email,
             password
         });
 
-        const loginResult = this.login(email, password);
+        // const loginResult = this.login(email, password);
 
-        return loginResult;
+        return result;
     }
 
     async login(email, password) {

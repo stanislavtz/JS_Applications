@@ -1,4 +1,4 @@
-import { getMovies } from '../data.js'
+import { getAllData } from '../data.js';
 
 export async function home() {
     this.partials = {
@@ -7,10 +7,8 @@ export async function home() {
         movie: await this.load('./templates/movies/movie.hbs')
     }
 
-    const movies = await getMovies();
+    const movies = await getAllData();
     this.app.userData.movies = movies;
 
-    const context = Object.assign({}, this.app.userData)
-
-    await this.partial('./templates/home.hbs', context);
+    await this.partial('./templates/home.hbs', this.app.userData);
 }
