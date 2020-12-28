@@ -16,30 +16,32 @@ function loadApplication() {
         this.get('#/home', home);
         this.get('index.html', home);
 
+
         this.get('#/register', user.registerPage);
         this.post('#/register', (ctx) => { user.registerPost.call(ctx) });
 
         this.get('#/login', user.loginPage);
         this.post('#/login', (ctx) => { user.loginPost.call(ctx) });
 
+        this.get('#/profile', user.profilePage);
+        
         this.get('#/logout', user.logout);
 
-        this.get('#/create', offer.createPage);
-        this.post('#/create', (ctx) => { offer.createPost.call(ctx) });
 
         this.get('#/dashboard', offer.dashboardPage);
 
-        this.get('#/details/:id', offer.detailsPage);
-
+        this.get('#/create', offer.createPage);
+        this.post('#/create', (ctx) => { offer.createPost.call(ctx) });
+       
         this.get('#/edit/:id', offer.editPage);
         this.post('#/edit/:id', (ctx) => { offer.editPost.call(ctx) });
 
         this.get('#/delete/:id', offer.deletePage);
         this.post('#/delete/:id', (ctx) => { offer.deletePost.call(ctx) });
-
-        this.get('#/buy/:id', offer.buyAction)
-
-        this.get('#/profile', user.profilePage);
+        
+        this.get('#/details/:id', offer.detailsPage);
+        
+        this.get('#/buy/:id', offer.buyAction);
     });
 
     app.run();

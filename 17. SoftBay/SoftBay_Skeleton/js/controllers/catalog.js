@@ -3,21 +3,21 @@ import { getUserById, updateUser } from "../userData.js";
 import { showError, showSuccess } from '../notification.js';
 
 export async function dashboardPage() {
-    let id = 0;
-
     const token = sessionStorage.getItem('userToken');
-
+    
     if (!token) {
         return;
     }
-
+    
     this.partials = {
         header: await this.load('./templates/common/header.hbs'),
         footer: await this.load('./templates/common/footer.hbs'),
         offer: await this.load('./templates/offers/offer.hbs')
     }
-
+    
     const offers = (await data.getAllData()).sort((a, b) => a.created - b.created);
+    
+    let id = 0;
 
     offers.forEach(offer => {
         offer.isOwner = offer.ownerId === sessionStorage.getItem('userId');
@@ -183,13 +183,24 @@ export async function deletePost() {
 }
 
 export async function buyAction() {
-    const user = await getUserById(sessionStorage.getItem('userId'));
+    try {
+        const user = await getUserById(sessionStorage.getItem('userId'));
     
-    if(user.purchases.includes(this.params.id)) { showError('You already had bought this item'); return; }
-
-    user.purchases.push(this.params.id);
-
-    await updateUser(user);
-
-    showSuccess('Successful bought item!');
+        if (user.purchases.includes(this.params.id)) {
+            showError('You already had bought this item'); 
+            return;
+        }
+    
+        user.purchases.push(this.params.id);
+    
+        await updateUser(user);
+    
+        showSuccess('Successful bought item!');
+    
+        this.redirect('#/dashboard');
+        
+    } catch (error) {
+        console.error(error.message);
+        showError(error.message);
+    }
 }
