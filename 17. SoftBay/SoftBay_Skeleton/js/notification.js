@@ -5,7 +5,7 @@ const elements = {
 }
 
 // elements.success.addEventListener('click', hideSuccess);
-elements.error.addEventListener('click', hideError);
+// elements.error.addEventListener('click', hideError);
 
 export function showSuccess(message) {
     elements.success.textContent = message;

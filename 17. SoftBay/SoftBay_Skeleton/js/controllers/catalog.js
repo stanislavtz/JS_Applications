@@ -1,9 +1,9 @@
-import * as data from '../data.js';
+import * as data from '../appData.js';
+import { getUserById, updateUser } from "../userData.js";
 import { showError, showSuccess } from '../notification.js';
 
-
 export async function dashboardPage() {
-    let num = 0;
+    let id = 0;
 
     const token = sessionStorage.getItem('userToken');
 
@@ -17,11 +17,11 @@ export async function dashboardPage() {
         offer: await this.load('./templates/offers/offer.hbs')
     }
 
-    const offers = await data.getAllData();
+    const offers = (await data.getAllData()).sort((a, b) => a.created - b.created);
 
     offers.forEach(offer => {
         offer.isOwner = offer.ownerId === sessionStorage.getItem('userId');
-        offer.num = ++num;
+        offer.id = ++id;
     });
 
     this.app.userData.offers = offers;
@@ -114,7 +114,6 @@ export async function createPost() {
         }
 
         const offer = {
-            id: 0,
             product,
             description,
             pictureUrl,
@@ -130,6 +129,7 @@ export async function createPost() {
         showSuccess('Created successfully!');
 
         this.redirect('#/dashboard');
+
     } catch (error) {
         console.error(error.message);
         showError(error.message);
@@ -175,6 +175,7 @@ export async function deletePost() {
         showSuccess('Deleted successfully');
 
         this.redirect('#/dashboard');
+
     } catch (error) {
         console.error(error.message);
         showError(error.message);
@@ -182,9 +183,13 @@ export async function deletePost() {
 }
 
 export async function buyAction() {
-    const user = await data.getUserById(sessionStorage.getItem('userId'));
+    const user = await getUserById(sessionStorage.getItem('userId'));
     
+    if(user.purchases.includes(this.params.id)) { showError('You already had bought this item'); return; }
+
     user.purchases.push(this.params.id);
 
-    await data.upadeUser(user);
+    await updateUser(user);
+
+    showSuccess('Successful bought item!');
 }

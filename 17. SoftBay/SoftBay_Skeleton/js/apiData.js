@@ -1,0 +1,4 @@
+export const apiData = {
+    id:'C7A1EAF3-F00F-A1E6-FF88-BC5FF8AAD800',
+    key: 'BDED48E7-1489-4593-B9EA-49B38848024C'
+}

@@ -83,34 +83,34 @@ export default class API {
         return result;
     }
 
-    async register(email, password) {
-        await this.post('users/register', {
-            email,
-            password
-        });
+    // async register(email, password) {
+    //     await this.post('users/register', {
+    //         email,
+    //         password
+    //     });
 
-        const loginResult = this.login(email, password);
+    //     const loginResult = this.login(email, password);
 
-        return loginResult;
-    }
+    //     return loginResult;
+    // }
 
-    async login(email, password) {
-        const result = await this.post('users/login', {
-            login: email,
-            password
-        });
+    // async login(email, password) {
+    //     const result = await this.post('users/login', {
+    //         login: email,
+    //         password
+    //     });
 
-        sessionStorage.setItem('email', result.email);
-        sessionStorage.setItem('userToken', result['user-token']);
-        sessionStorage.setItem('userId', result.objectId);
+    //     sessionStorage.setItem('email', result.email);
+    //     sessionStorage.setItem('userToken', result['user-token']);
+    //     sessionStorage.setItem('userId', result.objectId);
 
-        return result;
-    }
+    //     return result;
+    // }
 
-    async logout() {
-        const result = await this.get('users/logout');
-        sessionStorage.clear();
+    // async logout() {
+    //     const result = await this.get('users/logout');
+    //     sessionStorage.clear();
 
-        return result;
-    }
+    //     return result;
+    // }
 }
