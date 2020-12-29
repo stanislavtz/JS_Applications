@@ -37,25 +37,23 @@ export default class API {
     async get(endPoint) {
         const options = this.getOptions();
         
-        let result;
+        const result = await fetch(this.host(endPoint), options);
 
         this.beginRequest();
 
         try {
-            result = await (await fetch(this.host(endPoint), options)).json;
+            return await result.json();
         } catch (error) {
-            result = await fetch(host(endPoint), options);
+            return result;
+        } finally {
+            this.endRequest();
         }
-
-        this.endRequest();
-
-        return result;
     }
 
-    async post(endPoint, obj) {
+    async post(endPoint, body) {
         const options = this.getOptions({ 'Content-Type': 'application/json' });
         options.method = 'POST';
-        options.body = JSON.stringify(obj);
+        options.body = JSON.stringify(body);
 
         this.beginRequest();
         const result = (await fetch(this.host(endPoint), options)).json();
@@ -64,10 +62,10 @@ export default class API {
         return result;
     }
 
-    async put(endPoint, obj) {
+    async put(endPoint, body) {
         const options = this.getOptions({ 'Content-Type': 'application/json' });
         options.method = 'PUT';
-        options.body = JSON.stringify(obj);
+        options.body = JSON.stringify(body);
 
         this.beginRequest();
         const result = (await fetch(this.host(endPoint), options)).json();

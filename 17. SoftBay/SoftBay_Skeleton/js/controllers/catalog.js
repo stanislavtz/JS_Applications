@@ -105,9 +105,14 @@ export async function createPost() {
     try {
         const { product, price, pictureUrl, description } = this.params;
 
-        if (!(product && price && description)) {
+        if (!(product && description) || !Number(price)) {
             throw new Error('Invalid inputs!')
         }
+
+        // const re = /^(https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+        // if(!re.test(this.params.pictureUrl)) {
+        //     throw new Error("The image should start with https://");
+        // }
 
         if (!this.params.pictureUrl.startsWith('https://')) {
             throw new Error("The image should start with https://");
@@ -140,15 +145,27 @@ export async function editPost() {
     try {
         const { id, product, price, pictureUrl, description } = this.params;
 
+        if (!(product && description) || !Number(price)) {
+            throw new Error('Invalid inputs!')
+        }
+
+        // const re = /^(https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+        // if(!re.test(this.params.pictureUrl)) {
+        //     throw new Error("The image should start with https://");
+        // }
+
+        if (!this.params.pictureUrl.startsWith('https://')) {
+            throw new Error("The image should start with https://");
+        }
+
         const offer = {
-            objectId: id,
             product,
             description,
             pictureUrl,
             price
         }
 
-        const result = await data.editData(offer);
+        const result = await data.editData(id, offer);
 
         if (result.hasOwnProperty('errorData')) {
             throw new Error(result.message);
@@ -185,13 +202,8 @@ export async function deletePost() {
 export async function buyAction() {
     try {
         const user = await getUserById(sessionStorage.getItem('userId'));
-    
-        if (user.purchases.includes(this.params.id)) {
-            showError('You already had bought this item'); 
-            return;
-        }
-    
-        user.purchases.push(this.params.id);
+
+        user.purchases += 1;
     
         await updateUser(user);
     

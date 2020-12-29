@@ -21,8 +21,7 @@ export async function createData(offer) {
     return await api.post(endPoints.OFFERS, offer);
 }
 
-export async function editData(offer) {
-    const id = offer.objectId;
+export async function editData(id, offer) {
     return await api.put(`${endPoints.OFFERS}/${id}`, offer);
 }
 

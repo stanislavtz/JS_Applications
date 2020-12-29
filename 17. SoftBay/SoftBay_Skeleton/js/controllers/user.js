@@ -27,9 +27,9 @@ export async function profilePage() {
 
     const email = sessionStorage.getItem('email');
     const id = sessionStorage.getItem('userId');
-    const currentUser = await user.getUserById(id);
 
-    const purchasesCount = currentUser.purchases.length;
+    const currentUser = await user.getUserById(id);
+    const purchasesCount = currentUser.purchases;
 
     await this.partial('./templates/user/profile.hbs', { email, purchasesCount });
 }
@@ -57,6 +57,8 @@ export async function registerPost() {
         }
 
         showSuccess('User was successfull registered!');
+
+        await user.loginFn(email, password);
 
         this.redirect('#/home');
 

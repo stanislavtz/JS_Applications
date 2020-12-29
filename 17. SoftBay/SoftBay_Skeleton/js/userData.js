@@ -12,13 +12,10 @@ const endPoints = {
 }
 
 export async function registerFn(email, password) {
-    await api.post(endPoints.REGISTER, {
+    return await api.post(endPoints.REGISTER, {
         email,
         password,
-        purchases: []
     });
-
-    return loginFn(email, password);
 }
 
 export async function loginFn(email, password) {
@@ -26,6 +23,10 @@ export async function loginFn(email, password) {
         login: email,
         password
     });
+
+    if(result.hasOwnProperty('errorData')) {
+        return result;
+    }
 
     sessionStorage.setItem('email', result.email);
     sessionStorage.setItem('userId', result.objectId);
