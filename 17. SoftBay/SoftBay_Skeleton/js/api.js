@@ -36,16 +36,20 @@ export default class API {
 
     async get(endPoint) {
         const options = this.getOptions();
+        
+        let result;
 
         this.beginRequest();
-        const result = await fetch(this.host(endPoint), options);
-        this.endRequest();
 
         try {
-            return await result.json();
+            result = await (await fetch(this.host(endPoint), options)).json;
         } catch (error) {
-            return result;
+            result = await fetch(host(endPoint), options);
         }
+
+        this.endRequest();
+
+        return result;
     }
 
     async post(endPoint, obj) {
@@ -82,35 +86,4 @@ export default class API {
 
         return result;
     }
-
-    // async register(email, password) {
-    //     await this.post('users/register', {
-    //         email,
-    //         password
-    //     });
-
-    //     const loginResult = this.login(email, password);
-
-    //     return loginResult;
-    // }
-
-    // async login(email, password) {
-    //     const result = await this.post('users/login', {
-    //         login: email,
-    //         password
-    //     });
-
-    //     sessionStorage.setItem('email', result.email);
-    //     sessionStorage.setItem('userToken', result['user-token']);
-    //     sessionStorage.setItem('userId', result.objectId);
-
-    //     return result;
-    // }
-
-    // async logout() {
-    //     const result = await this.get('users/logout');
-    //     sessionStorage.clear();
-
-    //     return result;
-    // }
 }

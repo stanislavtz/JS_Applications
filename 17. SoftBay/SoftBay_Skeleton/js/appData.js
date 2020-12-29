@@ -2,19 +2,12 @@ import API from './api.js';
 import { apiData } from './apiData.js';
 import { beginRequest, endRequest } from './notification.js';
 
-// const appId = 'C7A1EAF3-F00F-A1E6-FF88-BC5FF8AAD800';
-// const apiKey = 'BDED48E7-1489-4593-B9EA-49B38848024C';
-
 const api = new API(apiData.id, apiData.key, beginRequest, endRequest);
 
 const endPoints = {
     OFFERS: 'data/offers',
     USERS: 'data/users'
 }
-
-// export const registerFn = api.register.bind(api);
-// export const loginFn = api.login.bind(api);
-// export const logoutFn = api.logout.bind(api);
 
 export async function getAllData() {
     return api.get(endPoints.OFFERS);
@@ -36,12 +29,3 @@ export async function editData(offer) {
 export async function deleteData(id) {
     return await api.del(`${endPoints.OFFERS}/${id}`);
 }
-
-// export async function getUserById(id) {
-//     return await api.get(`${endPoints.USERS}/${id}`);
-// }
-
-// export async function upadeUser(user) {
-//     const id = sessionStorage.getItem('userId')
-//     return await api.put(`${endPoints.USERS}/${id}`, user);
-// }
