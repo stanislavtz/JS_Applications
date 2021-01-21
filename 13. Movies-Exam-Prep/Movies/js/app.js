@@ -9,7 +9,7 @@ function loadApplication() {
         this.use('Handlebars', 'hbs');
 
         this.userData = {
-            email: () => sessionStorage.getItem('email') //|| 'stan@abv.bg',
+            email: () => sessionStorage.getItem('email'),
         }
 
         this.get('/', home);
